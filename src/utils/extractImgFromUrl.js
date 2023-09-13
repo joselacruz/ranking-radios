@@ -18,10 +18,17 @@ export async function extractImgFromUrl({homepageUrl,stationName,setState}) {
           );
         }
       } else {
-        console.log(
-          `La solicitud para ${homepageUrl} no fue exitosa. Estado: ${response.status}`
+        
+        // Imagen no encrotrada se muestra una por defecto.
+
+        setState((prevStations) =>
+          prevStations.map((station) =>
+            station.name === stationName
+              ? { ...station, favicon: "../../public/notfound.jpg" }
+              : station
+          )
         );
-        // Aquí puedes manejar la lógica de lo que deseas hacer si la URL no es válida.
+      
       }
     } catch (error) {
       console.log(`Error al obtener icono para ${homepageUrl}:`, error);

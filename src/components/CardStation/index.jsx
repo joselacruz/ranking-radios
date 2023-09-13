@@ -2,12 +2,12 @@ import { useState } from "react";
 
 import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
 import {
-  Box,
   Card,
   CardActionArea,
   CardContent,
   CardMedia,
   IconButton,
+  Skeleton,
   Typography,
 } from "@mui/material";
 
@@ -54,16 +54,26 @@ const CardStation = ({ station }) => {
           alignItems: "flex-start",
         }}
       >
-        <CardMedia
-          sx={{
-            height: 115,
-            width: "100%",
-            borderRadius: "4px",
-            objectFit: "cover",
-          }}
-          image={station.favicon}
-          title={station.name}
-        ></CardMedia>
+        {station.favicon ? (
+          <CardMedia
+            sx={{
+              height: 115,
+              width: "100%",
+              borderRadius: "4px",
+              objectFit: "cover",
+            }}
+            image={station.favicon}
+            title={station.name}
+          />
+        ) : (
+          <Skeleton
+            variant="rectangular"
+            width="100%"
+            height={115}
+            animation="wave"
+          ></Skeleton>
+        )}
+
         <CardContent sx={{ p: 1, marginTop: 1 }}>
           <Typography
             textTransform="uppercase"

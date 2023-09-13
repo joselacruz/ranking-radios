@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { makeServerRequest } from "../utils/serverRequestUtil";
-import { useFetchFavicon } from "../hooks/useFetchFavicon";
+import { useFetchFavicon } from "./useFetchFavicon";
 export const useData = ({endpoint,limit}) => {
     
   const [data, setData] = useState([]);

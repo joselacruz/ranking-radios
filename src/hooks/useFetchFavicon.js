@@ -5,9 +5,8 @@ const useFetchFavicon = (stations, setStations) => {
   useEffect(() => {
     stations.forEach((station) => {
       if (!station.favicon) {
-        console.log("No hay favicon, obteniendo icono...");
-
         
+        // No  existe favicon Intentamos  obtener desde el Sitio web de la estacion
         extractImgFromUrl({
           homepageUrl: station.homepage,
           stationName: station.name,
