@@ -2,16 +2,17 @@ import { Layout } from "../../components/Layout";
 import { ContainedStations } from "../../container/ContainedStations";
 import { useData } from "../../hooks/useData";
 import { ContainedStationsSkeleton } from "../../components/Skeleton/ContainedStationsSkeleton";
+import { RadioPlayer } from "../../components/RadioPlayer";
 
 const Home = () => {
   const [stationTopVote, setStationTopVote] = useData({
     endpoint: "json/stations/topvote",
-    limit: "5",
+    limit: "1",
   });
 
   const [stationTopClick, setStationTopClick] = useData({
     endpoint: "json/stations/lastclick",
-    limit: "5",
+    limit: "1",
   });
 
   function useRenderStations({ stations, titulo }) {
@@ -37,6 +38,7 @@ const Home = () => {
         stations: stationTopClick,
         titulo: "Top 10 Most Visited Stations",
       })}
+      <RadioPlayer />
     </Layout>
   );
 };
