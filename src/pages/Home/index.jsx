@@ -11,7 +11,7 @@ const Home = () => {
   });
 
   const [stationTopClick, setStationTopClick] = useData({
-    endpoint: "json/stations/lastclick",
+    endpoint: "json/stations/topclick",
     limit: "1",
   });
 

@@ -1,0 +1,8 @@
+.custom-opacity-animation {
+    transition: opacity 2.5s ease;
+  }
+  
+  .opacity-hidden {
+    opacity: 0 !important;
+  }
+  

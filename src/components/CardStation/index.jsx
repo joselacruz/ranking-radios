@@ -1,5 +1,6 @@
-import { useState } from "react";
-
+import { useContext, useState } from "react";
+import { PlayerContext } from "../../context/PlayerContext";
+import StopCircleIcon from "@mui/icons-material/StopCircle";
 import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
 import {
   Card,
@@ -9,9 +10,13 @@ import {
   IconButton,
   Skeleton,
   Typography,
+  CircularProgress,
 } from "@mui/material";
 
 const CardStation = ({ station }) => {
+  const context = useContext(PlayerContext);
+
+  const [isHovered, setIsHovered] = useState(false);
   const renderTags = () => {
     if (station.tags && station.tags.length > 0) {
       const rt = station.tags.map((tag) => {
@@ -20,7 +25,6 @@ const CardStation = ({ station }) => {
       return rt;
     }
   };
-  const [isHovered, setIsHovered] = useState(false);
 
   const handleMouseEnter = () => {
     setIsHovered(true);
@@ -29,7 +33,44 @@ const CardStation = ({ station }) => {
   const handleMouseLeave = () => {
     setIsHovered(false);
   };
+  const sendToStream = () => {
+    if (stationExistInContext()) {
+      context.setPlay(!context.play);
+    }
+    //si ya esta repoduciendo una estaccion actualizamos la url
+    else {
+      context.setStreamInfo(station);
+      context.setPlay(true);
+    }
+  };
 
+  function stationExistInContext() {
+    if (context.streamInfo == station) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  const renderIcon = () => {
+    const styles = {
+      fontSize: "58px",
+    };
+
+    if (stationExistInContext()) {
+      if (context.play) {
+        if (context.inReproduction) {
+          return <StopCircleIcon sx={styles} />;
+        } else {
+          return <CircularProgress sx={styles} />;
+        } // Mueve esta llave al mismo nivel que el return de CircularProgress
+      } else {
+        return <PlayCircleOutlineIcon sx={styles} />;
+      }
+    } else {
+      return <PlayCircleOutlineIcon sx={styles} />;
+    }
+  };
   return (
     <Card
       sx={{
@@ -110,12 +151,10 @@ const CardStation = ({ station }) => {
             opacity: isHovered ? 1 : 0.9, // Opacidad controlada por el hover
             transition: "transform 0.3s ease-in-out, opacity 0.3s ease-in-out", // Animación suave
           }}
+          onClick={sendToStream}
+          disabled={!context.inReproduction && context.play}
         >
-          <PlayCircleOutlineIcon
-            sx={{
-              fontSize: "58px",
-            }}
-          />
+          {renderIcon()}
         </IconButton>
       )}
     </Card>
