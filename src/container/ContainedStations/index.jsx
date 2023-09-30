@@ -4,10 +4,10 @@ import { CardStation } from "../../components/CardStation";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 
-const ContainedStations = ({ stations, titulo }) => {
+const ContainedStations = ({ stations, titulo, onLastSlideReached }) => {
   const [load, setLoad] = useState(true);
   const [currentSlide, setCurrentSlide] = useState(0);
-  const slidesPerPage = 4; // Cambia esto para controlar cuántas fotos se muestran a la vez
+  const slidesPerPage = 5; // Cambia esto para controlar cuántas fotos se muestran a la vez
 
   const handlePrevSlide = () => {
     setCurrentSlide((prevSlide) =>
@@ -18,7 +18,7 @@ const ContainedStations = ({ stations, titulo }) => {
   const handleNextSlide = () => {
     setCurrentSlide((prevSlide) =>
       prevSlide + slidesPerPage >= stations.length
-        ? stations.length - 1
+        ? (onLastSlideReached(), stations.length - 1) // Llama a la función de devolución de llamada
         : prevSlide + slidesPerPage
     );
   };
@@ -30,8 +30,7 @@ const ContainedStations = ({ stations, titulo }) => {
         textAlign="center"
         margin="8px"
       >
-        {" "}
-        {titulo}{" "}
+        {titulo}
       </Typography>
       <Box
         display="flex"
@@ -40,13 +39,14 @@ const ContainedStations = ({ stations, titulo }) => {
         flexWrap="wrap"
         gap={2}
         position="relative"
+        paddingBottom="48px"
       >
         {stations
           .slice(currentSlide, currentSlide + slidesPerPage)
           .map((station) => {
             return (
               <CardStation
-                key={station.name}
+                key={station.stationuuid}
                 station={station}
               />
             );
@@ -54,14 +54,14 @@ const ContainedStations = ({ stations, titulo }) => {
 
         <IconButton
           color="secondary"
-          sx={{ position: "absolute", left: 0 }}
+          sx={{ position: "absolute", left: 0, top: "50px" }}
           onClick={handlePrevSlide}
         >
           <NavigateBeforeIcon sx={{ fontSize: "48px" }} />
         </IconButton>
         <IconButton
           color="secondary"
-          sx={{ position: "absolute", right: 0 }}
+          sx={{ position: "absolute", right: 0, top: "50px" }}
           onClick={handleNextSlide}
         >
           <NavigateNextIcon sx={{ fontSize: "48px" }} />

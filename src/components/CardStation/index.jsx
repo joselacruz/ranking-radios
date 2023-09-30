@@ -45,7 +45,7 @@ const CardStation = ({ station }) => {
   };
 
   function stationExistInContext() {
-    if (context.streamInfo == station) {
+    if (context.streamInfo?.stationuuid == station.stationuuid) {
       return true;
     } else {
       return false;

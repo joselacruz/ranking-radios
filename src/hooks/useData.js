@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { makeServerRequest } from "../utils/serverRequestUtil";
-import { useFetchFavicon } from "./useFetchFavicon";
+import { updateFavicons } from "../utils/updateFavicoins";
+import { extractImgFromUrl } from "../utils/extractImgFromUrl";
 export const useData = ({endpoint,limit}) => {
     
   const [data, setData] = useState([]);
@@ -11,6 +12,7 @@ export const useData = ({endpoint,limit}) => {
         const result = await makeServerRequest({
           endpoint,
           limit,
+          
         });
         setData(result);
       } catch (error) {
@@ -18,7 +20,12 @@ export const useData = ({endpoint,limit}) => {
       }
     }
     fetchData();
-  }, [endpoint, limit]);
-  useFetchFavicon(data,setData)
+  }, [endpoint,limit]);
+
+  useEffect(() => {
+    updateFavicons({dataToUpdate:data, setdataToUpdate:setData})
+  }, [data]);
+
+
   return [data, setData];
 };

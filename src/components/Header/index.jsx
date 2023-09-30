@@ -11,7 +11,8 @@ import {
 } from "@mui/material";
 
 import { navLinks } from "./navLink";
-
+import { NavLink } from "react-router-dom";
+import "./style.css";
 const Header = () => {
   return (
     <>
@@ -32,7 +33,11 @@ const Header = () => {
                   disablePadding
                   key={item.title}
                 >
-                  <ListItemButton to={item.path}>
+                  <ListItemButton
+                    component={NavLink}
+                    to={item.path}
+                    className={({ isActive }) => (isActive ? "active" : "")}
+                  >
                     <ListItemIcon>{item.icon}</ListItemIcon>
                     {item.title}
                   </ListItemButton>
@@ -45,4 +50,5 @@ const Header = () => {
     </>
   );
 };
+
 export { Header };

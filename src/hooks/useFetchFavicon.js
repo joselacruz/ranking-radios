@@ -2,19 +2,24 @@ import { useEffect } from 'react';
 import { extractImgFromUrl } from "../utils/extractImgFromUrl";
 
 const useFetchFavicon = (stations, setStations) => {
+
+
   useEffect(() => {
     stations.forEach((station) => {
+      //Si no hay imagenes para Mostrar 
+
       if (!station.favicon) {
         
-        // No  existe favicon Intentamos  obtener desde el Sitio web de la estacion
         extractImgFromUrl({
           homepageUrl: station.homepage,
           stationName: station.name,
           setState: setStations,
+          state: stations
         });
+   
       }
     });
-  }, [stations.length]);
+  }, [stations,stations.length]);
 };
 
 export {useFetchFavicon};
