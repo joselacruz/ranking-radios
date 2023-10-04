@@ -1,50 +1,30 @@
 import { Layout } from "../../components/Layout";
-import { Paper } from "@mui/material";
-import InputBase from "@mui/material/InputBase";
-import IconButton from "@mui/material/IconButton";
-import SearchIcon from "@mui/icons-material/Search";
-import { useState, useEffect } from "react";
-import { makeServerRequest } from "../../utils/serverRequestUtil";
+import { useState } from "react";
 import { CardStation } from "../../components/CardStation";
-import { updateFavicons } from "../../utils/updateFavicoins";
-import { Container, Typography } from "@mui/material";
+import { Container, Button, Typography } from "@mui/material";
 import { Box } from "@mui/material";
 import { SearchBar } from "../../components/SearchBar";
-import { GenderSelector } from "../../components/GenderSelector";
+import { useSearchData } from "../../hooks/useSearchData";
+import { BackdropLoading } from "../../components/BackdropLoading";
+
 const Search = () => {
-  const [data, setData] = useState([]);
+  const {
+    data,
+    loadData,
+    moreResults,
+    hasMoreResults,
+    setData,
+    loading,
+    resetPagination,
+  } = useSearchData();
+  const [query, setQuery] = useState("");
 
-  //Realizar Busqueda
-  const loadData = async ({
-    queryParam,
-    value,
-    offset = 0,
-    preserveData = false,
-  }) => {
-    const queryParams = {
-      [queryParam]: value.toLowerCase(),
-    };
-
-    try {
-      const response = await makeServerRequest({
-        endpoint: "json/stations/search",
-        offset: offset,
-        limit: "10",
-        otherQuery: queryParams,
-      });
-
-      setData((prevData) =>
-        preserveData ? [...prevData, ...response] : response
-      ); // Actualiza los resultados de búsqueda
-    } catch (error) {
-      console.error("Ocurrió un error durante la búsqueda:", error);
-    }
-  };
-
-  // Actualiza la propiedad favicon para los elementos que la necesitan
-  useEffect(() => {
-    updateFavicons({ dataToUpdate: data, setdataToUpdate: setData });
-  }, [data, data.length > 0]);
+  /**
+   * Trae mas resultado para la palabra actual en el buscador
+   */
+  function loadMoreResults() {
+    moreResults({ queryParam: "name", value: query });
+  }
 
   return (
     <Layout>
@@ -53,13 +33,21 @@ const Search = () => {
         sx={{ display: "grid", gap: 3 }}
       >
         {/* Buscador */}
-
         <SearchBar
+          query={query}
+          setQuery={setQuery}
           loadData={loadData}
           setData={setData}
+          resetPagination={resetPagination}
         />
 
         {/*  mostrar los resultados de búsqueda */}
+
+        {!loading && data.length == 0 && query.length > 0 && (
+          <Typography variant="body1">
+            No se encontraron resultados para "{query}".
+          </Typography>
+        )}
         <Box
           display="flex"
           justifyContent="start"
@@ -77,9 +65,23 @@ const Search = () => {
             );
           })}
         </Box>
-        {/* Busqueda por Genero*/}
-        <GenderSelector loadData={loadData} />
+        {/* Boton para cargar mas resultados siempre y cuando en la primera solicitud
+        data tenga mas de 9 elementos */}
+
+        {data.length > 9 && (
+          <Button
+            variant="contained"
+            sx={{ width: "120px" }}
+            onClick={loadMoreResults}
+            disabled={!hasMoreResults}
+          >
+            View more
+          </Button>
+        )}
       </Container>
+
+      {/* renderiza un fondo gris claro con un indicador de carga (loading) */}
+      <BackdropLoading open={loading} />
     </Layout>
   );
 };

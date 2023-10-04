@@ -66,10 +66,10 @@ for (const server of serverList) {
     if (response.ok) {
       const data = await response.json();
       const parsed = data.map((item) => {
-        const tagsArray = item.tags.split(',').map((tag) => tag.trim());
+        const tagsArray = item.tags?.split(',').map((tag) => tag.trim());
         return {
           ...item,
-          tags: tagsArray.length > 3 ? tagsArray.slice(0, 3) : tagsArray,
+          tags: tagsArray?.length > 3 ? tagsArray.slice(0, 3) : tagsArray,
         };
       });
 

@@ -7,7 +7,7 @@ export async function extractImgFromUrl({ homepageUrl, id, name}) {
 
 //Si la ulr  Esta en Blanco no hace la peticion para obtener imagenes
   if(homepageUrl === '') {
-    console.log('En Blanco son',{page: homepageUrl, id:id, name: name })
+    
     return notFoundImage;
   }
   else{
@@ -22,7 +22,7 @@ export async function extractImgFromUrl({ homepageUrl, id, name}) {
       });
       clearTimeout(timeoutId);
       const data = await response.json();
-      console.log(response.status)
+
       if (data?.images && data.images.length > 0) {
         const  faviconFormJsonLink = data.images[0]
         clearTimeout(timeoutId);

@@ -2,8 +2,7 @@ import { Paper, IconButton, InputBase } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { useEffect, useState } from "react";
 
-const SearchBar = ({ loadData, setData }) => {
-  const [query, setQuery] = useState("");
+const SearchBar = ({ query, setQuery, loadData, setData, resetPagination }) => {
   const [isSearching, setIsSearching] = useState(false); // Bandera de búsqueda en curso
 
   useEffect(() => {
@@ -13,18 +12,19 @@ const SearchBar = ({ loadData, setData }) => {
     const delayedSearch = () => {
       if (query.trim() !== "") {
         setIsSearching(true);
-
+        resetPagination();
         timeoutId = setTimeout(() => {
           loadData({ queryParam: "name", value: query });
         }, 300);
       } else {
-        // Si la consulta está vacía, borra los resultados
+        // Limpia el temporizador si el usuario sigue escribiendo antes de que se ejecute la búsqueda
         setData([]);
         setIsSearching(false);
+        resetPagination();
       }
     };
 
-    // Limpia el temporizador si el usuario sigue escribiendo
+    // Limpia el temporizador si el usuario sigue escribiendo antes de que se ejecute la búsqueda
     clearTimeout(timeoutId);
 
     // Configura el temporizador para realizar la búsqueda

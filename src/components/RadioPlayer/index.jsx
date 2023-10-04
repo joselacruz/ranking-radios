@@ -142,94 +142,92 @@ const RadioPlayer = () => {
       >
         {/* contenedor General */}
 
-        {context.play && (
-          <Container
-            sx={{
-              height: 88,
-              width: "100%",
-              display: "flex",
-              justifyContent: "space-around",
-              paddingInlineStart: "16px",
-              paddingInlineEnd: "16px",
-            }}
-          >
-            {/* Contenedor info Station */}
-            <Box sx={stylesContained}>
-              <Paper
-                elevation={6}
-                sx={{
-                  width: "64px",
-                  height: "64px",
+        <Container
+          sx={{
+            height: 88,
+            width: "100%",
+            display: "flex",
+            justifyContent: "space-around",
+            paddingInlineStart: "16px",
+            paddingInlineEnd: "16px",
+          }}
+        >
+          {/* Contenedor info Station */}
+          <Box sx={stylesContained}>
+            <Paper
+              elevation={6}
+              sx={{
+                width: "64px",
+                height: "64px",
+              }}
+            >
+              <img
+                src={context.streamInfo?.favicon}
+                alt=""
+                style={{
+                  width: "100%",
+                  objectFit: "contain",
+                  height: "100%",
+                  borderRadius: "4px",
                 }}
+              />
+            </Paper>
+            <Box>
+              <Typography
+                variant="body1"
+                sx={{ fontWeight: "bold" }}
               >
-                <img
-                  src={context.streamInfo.favicon}
-                  alt=""
-                  style={{
-                    width: "100%",
-                    objectFit: "contain",
-                    height: "100%",
-                    borderRadius: "4px",
+                {context.streamInfo?.name}
+              </Typography>
+              <Typography variant="body2">
+                {context.streamInfo?.country}
+              </Typography>
+            </Box>
+          </Box>
+
+          {/* contenedor Live */}
+          <Box sx={stylesContained}>
+            <StreamLine isActive={context.inReproduction} />
+            <IconButton
+              onClick={togglePlay}
+              disabled={!context.inReproduction && context.play}
+            >
+              {renderIcon()}
+            </IconButton>
+
+            <StreamLine isActive={context.inReproduction} />
+          </Box>
+
+          {/* contenedor botones volumen */}
+
+          <Box sx={stylesContained}>
+            <Box sx={{ position: "relative" }}>
+              <IconButton onClick={showSound}>
+                <VolumeUpIcon sx={{ fontSize: "28px" }} />
+              </IconButton>
+              {showsliderSound && (
+                <Slider
+                  sx={{
+                    position: "absolute",
+                    top: "-140px",
+                    left: "4px",
+                    height: "100px",
                   }}
+                  orientation="vertical"
+                  aria-label="Volume"
+                  onChange={(event, newValue) => {
+                    setVolumen(newValue);
+                  }}
+                  value={volumen}
                 />
-              </Paper>
-              <Box>
-                <Typography
-                  variant="body1"
-                  sx={{ fontWeight: "bold" }}
-                >
-                  {context.streamInfo.name}
-                </Typography>
-                <Typography variant="body2">
-                  {context.streamInfo.country}
-                </Typography>
-              </Box>
+              )}
             </Box>
 
-            {/* contenedor Live */}
-            <Box sx={stylesContained}>
-              <StreamLine isActive={context.inReproduction} />
-              <IconButton
-                onClick={togglePlay}
-                disabled={!context.inReproduction && context.play}
-              >
-                {renderIcon()}
-              </IconButton>
-
-              <StreamLine isActive={context.inReproduction} />
-            </Box>
-
-            {/* contenedor botones volumen */}
-
-            <Box sx={stylesContained}>
-              <Box sx={{ position: "relative" }}>
-                <IconButton onClick={showSound}>
-                  <VolumeUpIcon sx={{ fontSize: "28px" }} />
-                </IconButton>
-                {showsliderSound && (
-                  <Slider
-                    sx={{
-                      position: "absolute",
-                      top: "-140px",
-                      left: "4px",
-                      height: "100px",
-                    }}
-                    orientation="vertical"
-                    aria-label="Volume"
-                    onChange={(event, newValue) => {
-                      setVolumen(newValue);
-                    }}
-                    value={volumen}
-                  />
-                )}
-              </Box>
-
-              <IconButton>
-                <FavoriteIcon sx={{ fontSize: "28px" }} />
-              </IconButton>
-            </Box>
-          </Container>
-        )}
+            <IconButton>
+              <FavoriteIcon sx={{ fontSize: "28px" }} />
+            </IconButton>
+          </Box>
+        </Container>
       </Drawer>
     </>
   );

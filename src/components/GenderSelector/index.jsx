@@ -47,9 +47,10 @@ const GenderCard = ({ name, color, handleClick }) => {
   );
 };
 
-const GenderSelector = ({ loadData }) => {
+const GenderSelector = ({ loadData, setSelectGender }) => {
   const loadDataByGender = (genderName) => {
     loadData({ queryParam: "tag", value: genderName });
+    setSelectGender(genderName);
   };
   return (
     <>
@@ -60,6 +61,7 @@ const GenderSelector = ({ loadData }) => {
         What do you want to listen?
       </Typography>
       <Box
+        maxWidth="sm"
         sx={{
           display: "flex",
           justifyContent: "flex-start",
@@ -67,6 +69,7 @@ const GenderSelector = ({ loadData }) => {
           flexWrap: "wrap",
         }}
       >
+        {/* card de generos */}
         {genderList.map((gender) => {
           return (
             <GenderCard

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { makeServerRequest } from "../utils/serverRequestUtil";
 import { updateFavicons } from "../utils/updateFavicoins";
-import { extractImgFromUrl } from "../utils/extractImgFromUrl";
+
 export const useData = ({endpoint,limit}) => {
     
   const [data, setData] = useState([]);

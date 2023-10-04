@@ -102,6 +102,7 @@ const CardStation = ({ station }) => {
               width: "100%",
               borderRadius: "4px",
               objectFit: "cover",
+              backgroundColor: "rgb(87 80 80 / 14%)",
             }}
             image={station.favicon}
             title={station.name}
