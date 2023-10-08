@@ -22,7 +22,7 @@ const ContainedStationsSkeleton = () => {
 
       <Box
         display="flex"
-        justifyContent="center"
+        justifyContent="start"
         alignItems="center"
         flexWrap="wrap"
         gap={2}

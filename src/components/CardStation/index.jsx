@@ -1,74 +1,56 @@
 import { useContext, useState } from "react";
-import { PlayerContext } from "../../context/PlayerContext";
-import StopCircleIcon from "@mui/icons-material/StopCircle";
-import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
+import { StationContext } from "../../context/StationContext";
+import { PlayPauseIcon } from "../PlayPauseIcon";
+import { useNavigate } from "react-router-dom";
+import { StarInCircleIcon } from "../StarInCircleIcon";
 import {
   Card,
   CardActionArea,
   CardContent,
   CardMedia,
-  IconButton,
   Skeleton,
   Typography,
-  CircularProgress,
+  Box,
 } from "@mui/material";
 
+import { calcScore } from "../../utils/scoreStation";
 const CardStation = ({ station }) => {
-  const context = useContext(PlayerContext);
+  const contextStation = useContext(StationContext);
 
+  const location = useNavigate();
+
+  //Estado que activa el Boton de play inicialmente en falso
   const [isHovered, setIsHovered] = useState(false);
-  const renderTags = () => {
-    if (station.tags && station.tags.length > 0) {
-      const rt = station.tags.map((tag) => {
-        return <span key={tag}> {tag}</span>;
-      });
-      return rt;
-    }
-  };
 
+  //Al pasar el cursor sobre sobre el elemento  hacemos visible el boton de play
   const handleMouseEnter = () => {
     setIsHovered(true);
   };
 
+  //Al salir el cursor del elemento ocultamos el boton de play
   const handleMouseLeave = () => {
     setIsHovered(false);
   };
-  const sendToStream = () => {
-    if (stationExistInContext()) {
-      context.setPlay(!context.play);
-    }
-    //si ya esta repoduciendo una estaccion actualizamos la url
-    else {
-      context.setStreamInfo(station);
-      context.setPlay(true);
-    }
-  };
 
-  function stationExistInContext() {
-    if (context.streamInfo?.stationuuid == station.stationuuid) {
-      return true;
-    } else {
-      return false;
-    }
-  }
+  /**
+   * Maneja el evento de clic en la tarjeta y navega a la ruta de detalles de la estación.
+   * @param {*} event - El objeto de evento del clic.
+   */
+  const handleStationDetails = (event) => {
+    // Verifica que el clic no se haya realizado en el elemento 'svg'
+    // El cual es el boton de play
+    if (event.target.nodeName !== "svg") {
+      // Verifica si la estación tiene un ícono Imagen (favicon) antes de proceder.
+      if (station.favicon) {
+        // Establece los detalles de la estación en el contexto.
+        contextStation.setStationDetails(station);
 
-  const renderIcon = () => {
-    const styles = {
-      fontSize: "58px",
-    };
+        // Crea una ruta amigable para la estación eliminando espacios y usando guiones
+        const createRoute = station.name.split(" ").join("-");
 
-    if (stationExistInContext()) {
-      if (context.play) {
-        if (context.inReproduction) {
-          return <StopCircleIcon sx={styles} />;
-        } else {
-          return <CircularProgress sx={styles} />;
-        } // Mueve esta llave al mismo nivel que el return de CircularProgress
-      } else {
-        return <PlayCircleOutlineIcon sx={styles} />;
+        // Navega a la ruta de detalles de la estación.
+        location(`/view/${createRoute}`);
       }
-    } else {
-      return <PlayCircleOutlineIcon sx={styles} />;
     }
   };
   return (
@@ -76,7 +58,7 @@ const CardStation = ({ station }) => {
       sx={{
         width: "150px",
         position: "relative",
-        height: "250px",
+        height: "210px",
 
         transition: "opacity 0.3s ease-in-out", // Animación de opacidad
         "&:hover": {
@@ -85,6 +67,7 @@ const CardStation = ({ station }) => {
       }}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
+      onClick={handleStationDetails}
     >
       <CardActionArea
         sx={{
@@ -123,41 +106,54 @@ const CardStation = ({ station }) => {
             variant="p"
             marginBottom="10px"
           >
-            {station.name}
+            {`${station.name?.slice(0, 17)} ...`}
           </Typography>
           <Typography
             variant="body2"
             color="text.secondary"
+            sx={{ height: "20px" }}
+            gutterBottom
           >
-            {station.country}
+            {station.countrycode}
           </Typography>
-          <Typography
-            variant="body2"
-            color="text.disabled"
+
+          <Box
+            sx={{
+              display: "flex",
+              gap: "3px",
+              alignItems: "end",
+            }}
           >
-            {station.tags.length > 1 && <>Tags: {renderTags()}</>}
-          </Typography>
+            <StarInCircleIcon size="24px" />
+            <Typography
+              variant="body2"
+              component="span"
+              color="text.secondary"
+            >
+              {calcScore({ stationVotes: station.votes })}
+            </Typography>
+          </Box>
         </CardContent>
       </CardActionArea>
 
-      {isHovered && ( // Mostrar el icono de reproducción en hover
-        <IconButton
-          color="primary"
-          className={`hover-button ${isHovered ? "hovered" : ""}`}
-          sx={{
-            position: "absolute",
-            top: "50%",
-            right: "0%",
-            transform: `translate(-50%, -50%) scale(${isHovered ? 1 : 0.8})`, // Escala inicial y al hacer hover
-            opacity: isHovered ? 1 : 0.9, // Opacidad controlada por el hover
-            transition: "transform 0.3s ease-in-out, opacity 0.3s ease-in-out", // Animación suave
-          }}
-          onClick={sendToStream}
-          disabled={!context.inReproduction && context.play}
-        >
-          {renderIcon()}
-        </IconButton>
-      )}
+      {isHovered &&
+        station.favicon && ( // Mostrar el icono de reproducción en hover
+          <Box
+            color="primary"
+            className={`hover-button ${isHovered ? "hovered" : ""}`}
+            sx={{
+              position: "absolute",
+              top: "50%",
+              right: "0%",
+              transform: `translate(-50%, -50%) scale(${isHovered ? 1 : 0.8})`, // Escala inicial y al hacer hover
+              opacity: isHovered ? 1 : 0.9, // Opacidad controlada por el hover
+              transition:
+                "transform 0.3s ease-in-out, opacity 0.3s ease-in-out", // Animación suave
+            }}
+          >
+            <PlayPauseIcon station={station} />
+          </Box>
+        )}
     </Card>
   );
 };
