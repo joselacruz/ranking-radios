@@ -6,6 +6,7 @@ import { RadioPlayer } from "../components/RadioPlayer";
 import { SearchByGender } from "../pages/SearchByGender";
 import { SearchByLocation } from "../pages/SearchByLocation";
 import { ViewStation } from "../pages/ViewStation";
+import { Recent } from "../pages/Recent";
 
 const AppRoutes = () => {
   let routes = useRoutes([
@@ -14,6 +15,7 @@ const AppRoutes = () => {
     { path: "/gender", element: <SearchByGender /> },
     { path: "/location", element: <SearchByLocation /> },
     { path: "/view/:id", element: <ViewStation /> },
+    { path: "/recent", element: <Recent /> },
   ]);
   return routes;
 };

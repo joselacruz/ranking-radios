@@ -3,7 +3,7 @@ import { Box, Container, Typography, IconButton, Stack } from "@mui/material";
 import { StationContext } from "../../context/StationContext";
 import { useContext } from "react";
 import { PlayPauseIcon } from "../../components/PlayPauseIcon";
-import FavoriteIcon from "@mui/icons-material/Favorite";
+import { FavoriteButton } from "../../components/FavoriteButton";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import { RadioStationInfoCard } from "../../components/RadioStationInfoCard";
 
@@ -73,9 +73,10 @@ const ViewStation = () => {
         >
           <PlayPauseIcon station={context.stationDetails} />
 
-          <IconButton>
-            <FavoriteIcon sx={{ fontSize: "28px" }} />
-          </IconButton>
+          <FavoriteButton
+            size="28px"
+            station={context.stationDetails}
+          />
           <IconButton>
             <ThumbUpIcon sx={{ fontSize: "28px" }} />
           </IconButton>

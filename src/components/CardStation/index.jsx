@@ -45,12 +45,19 @@ const CardStation = ({ station }) => {
         // Establece los detalles de la estación en el contexto.
         contextStation.setStationDetails(station);
 
+        // Envia La Estacion al Historial de Estaciones del Contexto
+        contextStation.addHistoryStatios(station);
+
         // Crea una ruta amigable para la estación eliminando espacios y usando guiones
         const createRoute = station.name.split(" ").join("-");
 
         // Navega a la ruta de detalles de la estación.
         location(`/view/${createRoute}`);
       }
+    } else {
+      //Si se Dio click en el Boton de Play tambien se
+      // Envia La Estacion al Historial de Estaciones del Contexto
+      contextStation.addHistoryStatios(station);
     }
   };
   return (

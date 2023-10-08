@@ -6,7 +6,7 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 
 const navLinks = [
   { title: "Home", path: "/", icon: <HomeIcon /> },
-  { title: "Recent", path: "/recents", icon: <ScheduleIcon /> },
+  { title: "Recent", path: "/recent", icon: <ScheduleIcon /> },
   { title: "Search", path: "/search", icon: <SearchIcon /> },
   {
     title: "By gender",

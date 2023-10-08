@@ -16,7 +16,7 @@ import {
 import PlayCircleIcon from "@mui/icons-material/PlayCircle";
 import StopCircleIcon from "@mui/icons-material/StopCircle";
 import VolumeUpIcon from "@mui/icons-material/VolumeUp";
-import FavoriteIcon from "@mui/icons-material/Favorite";
+import { FavoriteButton } from "../FavoriteButton";
 import { useSnackbar } from "notistack";
 
 const RadioPlayer = () => {
@@ -224,7 +224,10 @@ const RadioPlayer = () => {
             </Box>
 
             <IconButton>
-              <FavoriteIcon sx={{ fontSize: "28px" }} />
+              <FavoriteButton
+                size="28px"
+                station={context.streamInfo}
+              />
             </IconButton>
           </Box>
         </Container>
