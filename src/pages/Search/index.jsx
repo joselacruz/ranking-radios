@@ -1,5 +1,5 @@
 import { Layout } from "../../components/Layout";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CardStation } from "../../components/CardStation";
 import { Container, Button, Typography } from "@mui/material";
 import { SearchBar } from "../../components/SearchBar";
@@ -26,6 +26,22 @@ const Search = () => {
     moreResults({ queryParam: "name", value: query });
   }
 
+  const [showNoResultsMessage, setShowNoResultsMessage] = useState(false);
+
+  // ... (resto del código)
+
+  useEffect(() => {
+    // Se establece un temporizador de 500 ms antes de mostrar el mensaje de no resultados
+    const timer = setTimeout(() => {
+      setShowNoResultsMessage(
+        !loading && data.length === 0 && query.length > 0
+      );
+    }, 500);
+
+    // Limpiar el temporizador en cada cambio en el estado de búsqueda o consulta
+    return () => clearTimeout(timer);
+  }, [query, loading, data]);
+
   return (
     <Layout>
       <Container
@@ -42,8 +58,7 @@ const Search = () => {
         />
 
         {/*  mostrar los resultados de búsqueda */}
-
-        {!loading && data.length == 0 && query.length > 0 && (
+        {showNoResultsMessage && (
           <Typography variant="body1">
             No se encontraron resultados para "{query}".
           </Typography>
