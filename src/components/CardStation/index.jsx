@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import { StationContext } from "../../context/StationContext";
-import { UserContext } from "../../context/UserContext";
+
 import { PlayPauseIcon } from "../PlayPauseIcon";
 import { useNavigate } from "react-router-dom";
 import { StarInCircleIcon } from "../StarInCircleIcon";

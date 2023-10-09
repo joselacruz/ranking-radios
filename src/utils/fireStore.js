@@ -42,7 +42,7 @@ const analytics = getAnalytics(app);
  * @param {string} param0.userId - Identificador único del usuario.
  * @param {Object} param0.data - Datos a ser guardados.
  */
-export const saveRecentFireStore = async ({ userId, data }) => {
+export const saveFireStore = async ({nameObj, userId, data }) => {
   try {
     // Verifica si el documento existe llamando a la función 'docExist'
     const check = await docExist({ name: "users", docId: userId });
@@ -51,12 +51,12 @@ export const saveRecentFireStore = async ({ userId, data }) => {
       // Si el documento existe, realiza la operación para agregar el elemento al final del array
       const docRef = doc(db, "users", userId);
       await updateDoc(docRef, {
-        recent: arrayUnion(data),
+        [nameObj]: arrayUnion(data),
       });
    
     } else {
       // Si el documento no existe, crea un nuevo documento con el array inicializado con 'data'
-      await setDoc(doc(db, "users", userId), { recent: [data] });
+      await setDoc(doc(db, "users", userId), { [nameObj]: [data] });
       
     }
   } catch (error) {
@@ -111,3 +111,17 @@ export const getData = async (userId) => {
       return [];
     }
   };
+
+  export const removeItemFireStore = async ({ nameObj, userId, data }) => {
+    try {
+      const docRef = doc(db, "users", userId);
+  
+      // Actualiza el documento, eliminando el elemento del array
+      await updateDoc(docRef, {
+        [nameObj]: arrayRemove(data),
+      });
+    } catch (error) {
+      console.error("Error al eliminar elemento en Firestore:", error);
+    }
+  };
+  

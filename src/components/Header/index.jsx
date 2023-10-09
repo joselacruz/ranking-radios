@@ -36,7 +36,11 @@ const Header = () => {
                   <ListItemButton
                     component={NavLink}
                     to={item.path}
-                    className={({ isActive }) => (isActive ? "active" : "")}
+                    sx={{
+                      "&.active": {
+                        backgroundColor: "#b5bac95d",
+                      },
+                    }}
                   >
                     <ListItemIcon>{item.icon}</ListItemIcon>
                     {item.title}

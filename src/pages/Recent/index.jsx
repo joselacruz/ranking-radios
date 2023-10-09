@@ -12,13 +12,13 @@ const Recent = () => {
    */
   const showHistoryResult = () => {
     // Verifica si hay estaciones en el historial.
-    if (context.historyStations.length > 0) {
+    if (context.historyStations?.length > 0) {
       // Mapea las estaciones en el historial y crea tarjetas para cada una.
-      const result = context.historyStations.map((item) => {
+      const result = context.historyStations.map((item, index) => {
         return (
           <CardStation
             station={item}
-            key={item.stationuuid}
+            key={item.stationuuid + index}
           />
         );
       });

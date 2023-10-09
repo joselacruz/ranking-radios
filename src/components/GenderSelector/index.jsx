@@ -73,6 +73,7 @@ const GenderSelector = ({ loadData, setSelectGender }) => {
         {genderList.map((gender) => {
           return (
             <GenderCard
+              key={gender.name}
               name={gender.name}
               color={gender.color}
               gender

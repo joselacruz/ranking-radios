@@ -1,6 +1,8 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { UserContext } from "./UserContext";
 import { getData } from "../utils/fireStore";
+import { saveFireStore } from "../utils/fireStore";
+import { removeItemFireStore } from "../utils/fireStore";
 
 export const StationContext = createContext();
 
@@ -28,7 +30,11 @@ export const StationProvider = ({ children }) => {
       setHistoryStations([...historyStations, newStation]);
 
       // Guarda La Estacion en el Historial de Estaciones en FireStore
-      saveRecentFireStore({ userId: userContext.user, data: station });
+      saveFireStore({
+        nameObj: "historyStations",
+        userId: userContext.user,
+        data: newStation,
+      });
     }
   };
 
@@ -46,6 +52,13 @@ export const StationProvider = ({ children }) => {
     if (!isExistInfavorite(station.stationuuid)) {
       // Actualizar el estado de favoritos agregando el nuevo ID de estación
       setFavorites([...favorites, station]);
+
+      // Guarda La Estaciones favoritas en FireStore
+      saveFireStore({
+        nameObj: "favorites",
+        userId: userContext.user,
+        data: station,
+      });
     }
   };
 
@@ -60,6 +73,12 @@ export const StationProvider = ({ children }) => {
 
       // Actualizar el estado de favoritos con el nuevo array
       setFavorites(newDataExcludingIdStation);
+
+      removeItemFireStore({
+        nameObj: "favorites",
+        userId: userContext.user,
+        data: station,
+      });
     }
   };
 
@@ -70,7 +89,13 @@ export const StationProvider = ({ children }) => {
       const data = await getData(userContext.user);
 
       // Actualiza el estado con las estaciones del historial
-      setHistoryStations(data.recent);
+      if (data.historyStations?.length > 0) {
+        setHistoryStations(data.historyStations);
+      }
+      // Actualiza el estado con las estaciones favoritas
+      if (data.favorites?.length > 0) {
+        setFavorites(data.favorites);
+      }
     }
 
     fetchHistoryAndFavorites();

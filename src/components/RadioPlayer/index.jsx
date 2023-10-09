@@ -223,12 +223,10 @@ const RadioPlayer = () => {
               )}
             </Box>
 
-            <IconButton>
-              <FavoriteButton
-                size="28px"
-                station={context.streamInfo}
-              />
-            </IconButton>
+            <FavoriteButton
+              size="28px"
+              station={context.streamInfo}
+            />
           </Box>
         </Container>
       </Drawer>
