@@ -1,9 +1,11 @@
 import { Layout } from "../../components/Layout";
-import { Box, Container, Typography, IconButton, Stack } from "@mui/material";
+import { Container, Typography } from "@mui/material";
 import { StationContext } from "../../context/StationContext";
 import { CardStation } from "../../components/CardStation";
 import { useContext } from "react";
 import { ContainedStationsSkeleton } from "../../components/Skeleton/ContainedStationsSkeleton";
+import { CardContainer } from "../../container/CardContainer";
+
 const Recent = () => {
   const context = useContext(StationContext);
 
@@ -61,16 +63,11 @@ const Recent = () => {
         >
           Recent
         </Typography>
-        <Box
-          display="flex"
-          flexDirection="row-reverse"
-          justifyContent="start"
-          alignItems="center"
-          flexWrap="wrap"
-          gap={2}
-        >
-          {showHistoryResult()}
-        </Box>
+
+        <CardContainer
+          children={showHistoryResult()}
+          flexDirection={"row-reverse"}
+        />
       </Container>
     </Layout>
   );

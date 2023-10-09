@@ -101,7 +101,7 @@ const SearchByLocation = () => {
         {selectedCountry && stationCount && (
           <>
             <Typography variant="h6">
-              Resultados para {selectedCountry.name}
+              Results for {selectedCountry.name}
             </Typography>
             <Typography variant="body1">{stationCount} stations</Typography>
           </>

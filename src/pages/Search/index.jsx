@@ -2,10 +2,10 @@ import { Layout } from "../../components/Layout";
 import { useState } from "react";
 import { CardStation } from "../../components/CardStation";
 import { Container, Button, Typography } from "@mui/material";
-import { Box } from "@mui/material";
 import { SearchBar } from "../../components/SearchBar";
 import { useSearchData } from "../../hooks/useSearchData";
 import { BackdropLoading } from "../../components/BackdropLoading";
+import { CardContainer } from "../../container/CardContainer";
 
 const Search = () => {
   const {
@@ -48,14 +48,8 @@ const Search = () => {
             No se encontraron resultados para "{query}".
           </Typography>
         )}
-        <Box
-          display="flex"
-          justifyContent="start"
-          alignItems="center"
-          flexWrap="wrap"
-          gap={2}
-        >
-          {data.map((station, index) => {
+        <CardContainer
+          children={data.map((station, index) => {
             const key = station.name + index;
             return (
               <CardStation
@@ -64,7 +58,8 @@ const Search = () => {
               />
             );
           })}
-        </Box>
+        />
+
         {/* Boton para cargar mas resultados siempre y cuando en la primera solicitud
         data tenga mas de 9 elementos */}
 

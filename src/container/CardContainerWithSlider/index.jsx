@@ -1,10 +1,10 @@
-import { Box, Button, IconButton, Typography } from "@mui/material";
+import { Box, IconButton, Typography } from "@mui/material";
 import { useState } from "react";
 import { CardStation } from "../../components/CardStation";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 
-const ContainedStations = ({ stations, titulo, onLastSlideReached }) => {
+const CardContainerWithSlider = ({ stations, titulo, onLastSlideReached }) => {
   const [load, setLoad] = useState(true);
   const [currentSlide, setCurrentSlide] = useState(0);
   const slidesPerPage = 5; // Cambia esto para controlar cuántas fotos se muestran a la vez
@@ -71,4 +71,4 @@ const ContainedStations = ({ stations, titulo, onLastSlideReached }) => {
   );
 };
 
-export { ContainedStations };
+export { CardContainerWithSlider };

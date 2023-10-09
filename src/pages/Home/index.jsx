@@ -1,5 +1,5 @@
 import { Layout } from "../../components/Layout";
-import { ContainedStations } from "../../container/ContainedStations";
+import { CardContainerWithSlider } from "../../container/CardContainerWithSlider";
 import { useData } from "../../hooks/useData";
 import { ContainedStationsSkeleton } from "../../components/Skeleton/ContainedStationsSkeleton";
 
@@ -36,7 +36,7 @@ const Home = () => {
   function useRenderStations({ stations, titulo, update }) {
     if (stations.length > 0) {
       return (
-        <ContainedStations
+        <CardContainerWithSlider
           titulo={titulo}
           stations={stations}
           onLastSlideReached={() => onLastSlideReached(update)}
