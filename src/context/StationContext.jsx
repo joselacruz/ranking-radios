@@ -1,8 +1,12 @@
-import { createContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
+import { UserContext } from "./UserContext";
+import { getData } from "../utils/fireStore";
 
 export const StationContext = createContext();
 
 export const StationProvider = ({ children }) => {
+  const userContext = useContext(UserContext);
+
   //Detalles De la Estacion De Radio Visitada
   const [stationDetails, setStationDetails] = useState({});
 
@@ -22,6 +26,9 @@ export const StationProvider = ({ children }) => {
     //Solo si no la tiene actualizamos el estado
     if (!isExistInHistory) {
       setHistoryStations([...historyStations, newStation]);
+
+      // Guarda La Estacion en el Historial de Estaciones en FireStore
+      saveRecentFireStore({ userId: userContext.user, data: station });
     }
   };
 
@@ -56,7 +63,18 @@ export const StationProvider = ({ children }) => {
     }
   };
 
-  console.log("favorites", favorites);
+  useEffect(() => {
+    // Función asincrónica para obtener datos del historial y estaciones favoritas del usuario
+    async function fetchHistoryAndFavorites() {
+      // Llamada a la función para obtener datos del usuario
+      const data = await getData(userContext.user);
+
+      // Actualiza el estado con las estaciones del historial
+      setHistoryStations(data.recent);
+    }
+
+    fetchHistoryAndFavorites();
+  }, []);
 
   return (
     <StationContext.Provider

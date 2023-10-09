@@ -1,0 +1,113 @@
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+import {
+  getDocs,
+  collection,
+  addDoc,
+  doc,
+  deleteDoc,
+  updateDoc,
+  setDoc,
+  arrayUnion,
+  getDoc,
+  arrayRemove,
+  FieldValue,
+} from "firebase/firestore";
+import { getFirestore } from "firebase/firestore";
+
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyDRRVXzPlmQBBmyKt-_mSphkNcbwUNaYS8",
+  authDomain: "radio-ranking.firebaseapp.com",
+  projectId: "radio-ranking",
+  storageBucket: "radio-ranking.appspot.com",
+  messagingSenderId: "849651209512",
+  appId: "1:849651209512:web:811a294e96f42d4c982c1d",
+  measurementId: "G-63PL9XG7XR",
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+export const db = getFirestore(app);
+const analytics = getAnalytics(app);
+
+/**
+ * Guarda datos en Firestore para un usuario específico, actualizando un array si ya existe o creando uno nuevo si no.
+ * @param {Object} param0 - Parámetros de la función.
+ * @param {string} param0.userId - Identificador único del usuario.
+ * @param {Object} param0.data - Datos a ser guardados.
+ */
+export const saveRecentFireStore = async ({ userId, data }) => {
+  try {
+    // Verifica si el documento existe llamando a la función 'docExist'
+    const check = await docExist({ name: "users", docId: userId });
+
+    if (check) {
+      // Si el documento existe, realiza la operación para agregar el elemento al final del array
+      const docRef = doc(db, "users", userId);
+      await updateDoc(docRef, {
+        recent: arrayUnion(data),
+      });
+   
+    } else {
+      // Si el documento no existe, crea un nuevo documento con el array inicializado con 'data'
+      await setDoc(doc(db, "users", userId), { recent: [data] });
+      
+    }
+  } catch (error) {
+    // Maneja errores si ocurren durante el proceso de guardado
+    console.error("Error al guardar datos en Firestore:", error);
+  }
+};
+// FIN saveRecentFireStore **
+
+/**
+ * Verifica si un documento específico existe en Firestore.
+ * @param {Object} param0 - Parámetros de la función.
+ * @param {string} param0.name - Nombre de la colección.
+ * @param {string} param0.docId - Identificador único del documento.
+ * @returns {Promise<boolean>} - Retorna una promesa que resuelve a 'true' si el documento existe, 'false' si no existe o maneja errores.
+ */
+async function docExist({ name, docId }) {
+  const docRef = doc(db, name, docId);
+
+  try {
+    const docSnapshot = await getDoc(docRef);
+
+    // Si el documento existe, retorna 'true', si no existe, retorna 'false'
+    return docSnapshot.exists();
+  } catch (error) {
+    // Maneja errores durante la obtención del documento
+    console.error("Error al obtener el documento:", error);
+    // Retorna 'false' en caso de error para indicar que no existe
+    return false;
+  }
+}
+// FIN docExist  **
+
+
+export const getData = async (userId) => {
+    try {
+      const docRef = doc(db, "users", userId);
+      const docSnapshot = await getDoc(docRef);
+  
+      if (docSnapshot.exists()) {
+        // Si el documento existe, retorna el array 'recents'
+        const userData = docSnapshot.data();
+        return userData || [];
+      } else {
+        // Si el documento no existe, retorna un array vacío
+        console.log("El documento no existe.");
+        return [];
+      }
+    } catch (error) {
+      // Maneja errores si ocurren durante el proceso de obtención de datos
+      console.error("Error al obtener datos de Firestore:", error);
+      return [];
+    }
+  };

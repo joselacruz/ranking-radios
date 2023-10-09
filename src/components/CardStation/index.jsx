@@ -1,8 +1,11 @@
 import { useContext, useState } from "react";
 import { StationContext } from "../../context/StationContext";
+import { UserContext } from "../../context/UserContext";
 import { PlayPauseIcon } from "../PlayPauseIcon";
 import { useNavigate } from "react-router-dom";
 import { StarInCircleIcon } from "../StarInCircleIcon";
+import { calcScore } from "../../utils/scoreStation";
+
 import {
   Card,
   CardActionArea,
@@ -13,7 +16,6 @@ import {
   Box,
 } from "@mui/material";
 
-import { calcScore } from "../../utils/scoreStation";
 const CardStation = ({ station }) => {
   const contextStation = useContext(StationContext);
 
