@@ -13,7 +13,7 @@ export const StationProvider = ({ children }) => {
   const [stationDetails, setStationDetails] = useState({});
 
   //Historial de Estaciones Reproducidas y visitadas
-  const [historyStations, setHistoryStations] = useState([]);
+  const [historyStations, setHistoryStations] = useState(null);
 
   //Actualizar el Historial de Estaciones
   const addHistoryStatios = (newStation) => {
@@ -89,9 +89,7 @@ export const StationProvider = ({ children }) => {
       const data = await getData(userContext.user);
 
       // Actualiza el estado con las estaciones del historial
-      if (data.historyStations?.length > 0) {
-        setHistoryStations(data.historyStations);
-      }
+      setHistoryStations(data.historyStations || []);
       // Actualiza el estado con las estaciones favoritas
       if (data.favorites?.length > 0) {
         setFavorites(data.favorites);

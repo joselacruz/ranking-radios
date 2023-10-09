@@ -2,17 +2,12 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import {
-  getDocs,
-  collection,
-  addDoc,
   doc,
-  deleteDoc,
   updateDoc,
   setDoc,
   arrayUnion,
   getDoc,
   arrayRemove,
-  FieldValue,
 } from "firebase/firestore";
 import { getFirestore } from "firebase/firestore";
 
@@ -42,7 +37,7 @@ const analytics = getAnalytics(app);
  * @param {string} param0.userId - Identificador único del usuario.
  * @param {Object} param0.data - Datos a ser guardados.
  */
-export const saveFireStore = async ({nameObj, userId, data }) => {
+export const saveFireStore = async ({ nameObj, userId, data }) => {
   try {
     // Verifica si el documento existe llamando a la función 'docExist'
     const check = await docExist({ name: "users", docId: userId });
@@ -53,11 +48,9 @@ export const saveFireStore = async ({nameObj, userId, data }) => {
       await updateDoc(docRef, {
         [nameObj]: arrayUnion(data),
       });
-   
     } else {
       // Si el documento no existe, crea un nuevo documento con el array inicializado con 'data'
       await setDoc(doc(db, "users", userId), { [nameObj]: [data] });
-      
     }
   } catch (error) {
     // Maneja errores si ocurren durante el proceso de guardado
@@ -90,38 +83,36 @@ async function docExist({ name, docId }) {
 }
 // FIN docExist  **
 
-
 export const getData = async (userId) => {
-    try {
-      const docRef = doc(db, "users", userId);
-      const docSnapshot = await getDoc(docRef);
-  
-      if (docSnapshot.exists()) {
-        // Si el documento existe, retorna el array 'recents'
-        const userData = docSnapshot.data();
-        return userData || [];
-      } else {
-        // Si el documento no existe, retorna un array vacío
-        console.log("El documento no existe.");
-        return [];
-      }
-    } catch (error) {
-      // Maneja errores si ocurren durante el proceso de obtención de datos
-      console.error("Error al obtener datos de Firestore:", error);
+  try {
+    const docRef = doc(db, "users", userId);
+    const docSnapshot = await getDoc(docRef);
+
+    if (docSnapshot.exists()) {
+      // Si el documento existe, retorna el array 'recents'
+      const userData = docSnapshot.data();
+      return userData || [];
+    } else {
+      // Si el documento no existe, retorna un array vacío
+      console.log("El documento no existe.");
       return [];
     }
-  };
+  } catch (error) {
+    // Maneja errores si ocurren durante el proceso de obtención de datos
+    console.error("Error al obtener datos de Firestore:", error);
+    return [];
+  }
+};
 
-  export const removeItemFireStore = async ({ nameObj, userId, data }) => {
-    try {
-      const docRef = doc(db, "users", userId);
-  
-      // Actualiza el documento, eliminando el elemento del array
-      await updateDoc(docRef, {
-        [nameObj]: arrayRemove(data),
-      });
-    } catch (error) {
-      console.error("Error al eliminar elemento en Firestore:", error);
-    }
-  };
-  
+export const removeItemFireStore = async ({ nameObj, userId, data }) => {
+  try {
+    const docRef = doc(db, "users", userId);
+
+    // Actualiza el documento, eliminando el elemento del array
+    await updateDoc(docRef, {
+      [nameObj]: arrayRemove(data),
+    });
+  } catch (error) {
+    console.error("Error al eliminar elemento en Firestore:", error);
+  }
+};
