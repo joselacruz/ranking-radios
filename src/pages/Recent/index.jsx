@@ -55,20 +55,17 @@ const Recent = () => {
 
   return (
     <Layout>
-      <Container>
-        <Typography
-          variant="h4"
-          component="h2"
-          marginBottom="15px"
-        >
-          Recent
-        </Typography>
+      <Typography
+        variant="h4"
+        component="h2"
+      >
+        Recent
+      </Typography>
 
-        <CardContainer
-          children={showHistoryResult()}
-          flexDirection={"row-reverse"}
-        />
-      </Container>
+      <CardContainer
+        children={showHistoryResult()}
+        flexDirection={"row-reverse"}
+      />
     </Layout>
   );
 };

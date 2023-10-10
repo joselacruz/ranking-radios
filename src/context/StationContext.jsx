@@ -39,7 +39,7 @@ export const StationProvider = ({ children }) => {
   };
 
   //estado para almacenar las estaciones favoritas
-  const [favorites, setFavorites] = useState([]);
+  const [favorites, setFavorites] = useState(null);
 
   // Función para verificar si una estación con el ID dado ya está en favoritos
   const isExistInfavorite = (idStation) => {
@@ -91,9 +91,8 @@ export const StationProvider = ({ children }) => {
       // Actualiza el estado con las estaciones del historial
       setHistoryStations(data.historyStations || []);
       // Actualiza el estado con las estaciones favoritas
-      if (data.favorites?.length > 0) {
-        setFavorites(data.favorites);
-      }
+
+      setFavorites(data.favorites || []);
     }
 
     fetchHistoryAndFavorites();

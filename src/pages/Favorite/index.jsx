@@ -4,7 +4,7 @@ import { CardContainer } from "../../container/CardContainer";
 import { StationContext } from "../../context/StationContext";
 import { CardStation } from "../../components/CardStation";
 import { ContainedStationsSkeleton } from "../../components/Skeleton/ContainedStationsSkeleton";
-import { Typography, Container } from "@mui/material";
+import { Typography } from "@mui/material";
 
 const Favorite = () => {
   const context = useContext(StationContext);

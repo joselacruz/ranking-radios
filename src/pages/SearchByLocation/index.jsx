@@ -87,10 +87,7 @@ const SearchByLocation = () => {
 
   return (
     <Layout>
-      <Container
-        maxWidth="lg"
-        sx={{ display: "grid", gap: 3, justifyContent: "center" }}
-      >
+      <Container sx={{ display: "grid", gap: 3, justifyContent: "center" }}>
         {/* Selector de paises */}
         <CountrySelect
           selectedCountry={selectedCountry}
