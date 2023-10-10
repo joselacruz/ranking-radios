@@ -28,8 +28,6 @@ const Search = () => {
 
   const [showNoResultsMessage, setShowNoResultsMessage] = useState(false);
 
-  // ... (resto del código)
-
   useEffect(() => {
     // Se establece un temporizador de 500 ms antes de mostrar el mensaje de no resultados
     const timer = setTimeout(() => {
