@@ -38,6 +38,7 @@ const GenderCard = ({ name, color, handleClick }) => {
             textAlign={"center"}
             fontWeight={"bold"}
             color={"white"}
+            translate="no"
           >
             {name}
           </Typography>

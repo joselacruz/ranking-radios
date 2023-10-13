@@ -18,8 +18,10 @@ import StopCircleIcon from "@mui/icons-material/StopCircle";
 import VolumeUpIcon from "@mui/icons-material/VolumeUp";
 import { FavoriteButton } from "../FavoriteButton";
 import { useSnackbar } from "notistack";
+import { useMediaQuery } from "@mui/material";
 
 const RadioPlayer = () => {
+  const isMobile = useMediaQuery("(max-width:768px)");
   const context = useContext(PlayerContext);
   const audioElementRef = useRef(null);
   const [showsliderSound, setShowsliderSound] = useState(false);
@@ -56,6 +58,11 @@ const RadioPlayer = () => {
     }
   };
 
+  const sliceTitle = (name) => {
+    if (name && name.length > 14) {
+      return `${name.slice(0, 16)}...`;
+    } else if (name && name.length < 14) return name.slice(0, 15);
+  };
   // Reproducir
   useEffect(() => {
     const audioElement = audioElementRef.current;
@@ -139,6 +146,11 @@ const RadioPlayer = () => {
             overflow: "visible",
           },
         }}
+        sx={{
+          "& .MuiPaper-root": {
+            border: "none",
+          },
+        }}
       >
         {/* contenedor General */}
 
@@ -177,57 +189,58 @@ const RadioPlayer = () => {
                 variant="body1"
                 sx={{ fontWeight: "bold" }}
               >
-                {context.streamInfo?.name}
+                {sliceTitle(context.streamInfo?.name)}
               </Typography>
               <Typography variant="body2">
-                {context.streamInfo?.country}
+                {sliceTitle(context.streamInfo?.country)}
               </Typography>
             </Box>
           </Box>
 
           {/* contenedor Live */}
           <Box sx={stylesContained}>
-            <StreamLine isActive={context.inReproduction} />
+            {isMobile ? null : <StreamLine isActive={context.inReproduction} />}
             <IconButton
               onClick={togglePlay}
               disabled={!context.inReproduction && context.play}
             >
               {renderIcon()}
             </IconButton>
-
-            <StreamLine isActive={context.inReproduction} />
+            {isMobile ? null : <StreamLine isActive={context.inReproduction} />}
           </Box>
 
           {/* contenedor botones volumen */}
 
-          <Box sx={stylesContained}>
-            <Box sx={{ position: "relative" }}>
-              <IconButton onClick={showSound}>
-                <VolumeUpIcon sx={{ fontSize: "28px" }} />
-              </IconButton>
-              {showsliderSound && (
-                <Slider
-                  sx={{
-                    position: "absolute",
-                    top: "-140px",
-                    left: "4px",
-                    height: "100px",
-                  }}
-                  orientation="vertical"
-                  aria-label="Volume"
-                  onChange={(event, newValue) => {
-                    setVolumen(newValue);
-                  }}
-                  value={volumen}
-                />
-              )}
-            </Box>
+          {isMobile ? null : (
+            <Box sx={stylesContained}>
+              <Box sx={{ position: "relative" }}>
+                <IconButton onClick={showSound}>
+                  <VolumeUpIcon sx={{ fontSize: "28px" }} />
+                </IconButton>
+                {showsliderSound && (
+                  <Slider
+                    sx={{
+                      position: "absolute",
+                      top: "-140px",
+                      left: "4px",
+                      height: "100px",
+                    }}
+                    orientation="vertical"
+                    aria-label="Volume"
+                    onChange={(event, newValue) => {
+                      setVolumen(newValue);
+                    }}
+                    value={volumen}
+                  />
+                )}
+              </Box>
 
-            <FavoriteButton
-              size="28px"
-              station={context.streamInfo}
-            />
-          </Box>
+              <FavoriteButton
+                size="28px"
+                station={context.streamInfo}
+              />
+            </Box>
+          )}
         </Container>
       </Drawer>
     </>

@@ -1,13 +1,16 @@
 import { Box, Container } from "@mui/material";
+import { useMediaQuery } from "@mui/material";
 
 const Layout = ({ children }) => {
+  const isMobile = useMediaQuery("(max-width:800px)");
+
   return (
     <Box
       component="main"
       sx={{
-        marginLeft: "250px",
-        p: 3,
+        marginLeft: isMobile ? "" : "250px",
         paddingBottom: "180px",
+        paddingTop: isMobile ? "90px" : "30px",
       }}
     >
       <Container

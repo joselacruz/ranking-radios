@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Container, Typography } from "@mui/material";
+import { Button, Typography, Box } from "@mui/material";
 import { Layout } from "../../components/Layout";
 import { GenderSelector } from "../../components/GenderSelector";
 import { CardStation } from "../../components/CardStation";
@@ -53,12 +53,29 @@ const SearchByGender = () => {
           disabled={loading}
           onClick={loadMoreResults}
           variant="contained"
-          sx={{ marginTop: "20px", width: "120px" }}
+          sx={{
+            marginTop: "20px",
+            width: "120px",
+            justifySelf: {
+              xs: "center",
+              sm: "start",
+            },
+          }}
         >
           View more
         </Button>
       )}
-      <div style={{ justifySelf: "center" }}>
+      <Box
+        sx={{
+          justifySelf: "center",
+          margin: 0,
+          padding: 0,
+          width: {
+            xs: "300px",
+            sm: "600px",
+          },
+        }}
+      >
         {/*  Selector de Generos solo visible una vez */}
         {data.length === 0 && (
           <GenderSelector
@@ -66,7 +83,7 @@ const SearchByGender = () => {
             setSelectGender={setSelectGender}
           />
         )}
-      </div>
+      </Box>
       {/* renderiza un fondo gris claro con un indicador de carga (loading) */}
       <BackdropLoading open={loading} />
     </Layout>

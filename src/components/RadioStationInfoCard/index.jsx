@@ -56,8 +56,15 @@ const RadioStationInfoCard = ({ stationInfo }) => {
             <WebIcon />
             <ListItemText
               primary="Website"
-              secondary={website}
               sx={commonListItemTextStyles}
+              secondary={
+                <a
+                  href={website}
+                  target="_blank"
+                >
+                  visit
+                </a>
+              }
             />
           </ListItem>
           <ListItem sx={commonListItemStyles}>

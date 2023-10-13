@@ -1,13 +1,15 @@
 import { Box, IconButton, Typography } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CardStation } from "../../components/CardStation";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
+import { useMediaQuery } from "@mui/material";
 
 const CardContainerWithSlider = ({ stations, titulo, onLastSlideReached }) => {
   const [load, setLoad] = useState(true);
   const [currentSlide, setCurrentSlide] = useState(0);
-  const slidesPerPage = 5; // Cambia esto para controlar cuántas fotos se muestran a la vez
+  const [slidesPerPage, setSlidesPerPage] = useState(5); // Cambia esto para controlar cuántas fotos se muestran a la vez
+  const isMobile = useMediaQuery("(max-width:768px)");
 
   const handlePrevSlide = () => {
     setCurrentSlide((prevSlide) =>
@@ -16,13 +18,34 @@ const CardContainerWithSlider = ({ stations, titulo, onLastSlideReached }) => {
   };
 
   const handleNextSlide = () => {
-    setCurrentSlide((prevSlide) =>
-      prevSlide + slidesPerPage >= stations.length
-        ? (onLastSlideReached(), stations.length - 1) // Llama a la función de devolución de llamada
-        : prevSlide + slidesPerPage
-    );
+    //Para traer mas contenido al slider
+    // setCurrentSlide((prevSlide) =>
+    //   prevSlide + slidesPerPage >= stations.length
+    //     ? (onLastSlideReached(), stations.length - 1) // Llama a la función de devolución de llamada
+    //     : prevSlide + slidesPerPage
+    // );
+
+    setCurrentSlide((prevSlide) => {
+      const nextSlide = prevSlide + slidesPerPage;
+
+      if (nextSlide >= stations.length) {
+        // Evita que el slider muestre el elemento número 10
+        return prevSlide;
+      }
+
+      return nextSlide;
+    });
   };
 
+  //Actualiza la cantidad del elementos a mostrar si estamos en mobile
+  //Mostrams todos los elementos
+  useEffect(() => {
+    if (isMobile) {
+      setSlidesPerPage(10);
+    } else {
+      setSlidesPerPage(5);
+    }
+  }, [isMobile]);
   return (
     <>
       <Typography
@@ -52,20 +75,26 @@ const CardContainerWithSlider = ({ stations, titulo, onLastSlideReached }) => {
             );
           })}
 
-        <IconButton
-          color="secondary"
-          sx={{ position: "absolute", left: 0, top: "50px" }}
-          onClick={handlePrevSlide}
-        >
-          <NavigateBeforeIcon sx={{ fontSize: "48px" }} />
-        </IconButton>
-        <IconButton
-          color="secondary"
-          sx={{ position: "absolute", right: 0, top: "50px" }}
-          onClick={handleNextSlide}
-        >
-          <NavigateNextIcon sx={{ fontSize: "48px" }} />
-        </IconButton>
+        <>
+          {isMobile ? null : (
+            <>
+              <IconButton
+                color="secondary"
+                sx={{ position: "absolute", left: 0, top: "50px" }}
+                onClick={handlePrevSlide}
+              >
+                <NavigateBeforeIcon sx={{ fontSize: "48px" }} />
+              </IconButton>
+              <IconButton
+                color="secondary"
+                sx={{ position: "absolute", right: 0, top: "50px" }}
+                onClick={handleNextSlide}
+              >
+                <NavigateNextIcon sx={{ fontSize: "48px" }} />
+              </IconButton>
+            </>
+          )}
+        </>
       </Box>
     </>
   );

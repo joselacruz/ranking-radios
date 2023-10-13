@@ -3,11 +3,11 @@ import { Skeleton, Card, Box } from "@mui/material";
 
 const CardStationSkeleton = () => {
   return (
-    <Card sx={{ width: 150, height: 210 }}>
+    <Card sx={{ width: { xs: "120px", sm: "150px" }, height: 210 }}>
       <Skeleton
         variant="rectangular"
-        width={150}
         height={120}
+        width="100%"
       />
       <Box
         sx={{

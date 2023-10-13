@@ -97,10 +97,28 @@ const SearchByLocation = () => {
         {/* muestra el titulo y la cantidad de estaciones que hay para dicho pais */}
         {selectedCountry && stationCount && (
           <>
-            <Typography variant="h6">
+            <Typography
+              variant="h6"
+              sx={{
+                textAlign: {
+                  xs: "center",
+                  sm: "start",
+                },
+              }}
+            >
               Results for {selectedCountry.name}
             </Typography>
-            <Typography variant="body1">{stationCount} stations</Typography>
+            <Typography
+              variant="body1"
+              sx={{
+                textAlign: {
+                  xs: "center",
+                  sm: "start",
+                },
+              }}
+            >
+              {stationCount} stations
+            </Typography>
           </>
         )}
 
@@ -108,10 +126,15 @@ const SearchByLocation = () => {
         {data.length > 0 && (
           <Box
             display="flex"
-            justifyContent="start"
             alignItems="center"
             flexWrap="wrap"
             gap={2}
+            sx={{
+              justifyContent: {
+                xs: "center",
+                sm: "start",
+              },
+            }}
           >
             {data.map((station, index) => (
               <CardStation
@@ -127,7 +150,13 @@ const SearchByLocation = () => {
         {data.length > 9 && (
           <Button
             variant="contained"
-            sx={{ width: "120px" }}
+            sx={{
+              width: "120px",
+              justifySelf: {
+                xs: "center",
+                sm: "start",
+              },
+            }}
             onClick={loadMoreResults}
             disabled={!hasMoreResults}
           >

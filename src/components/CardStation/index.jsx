@@ -5,6 +5,7 @@ import { PlayPauseIcon } from "../PlayPauseIcon";
 import { useNavigate } from "react-router-dom";
 import { StarInCircleIcon } from "../StarInCircleIcon";
 import { calcScore } from "../../utils/scoreStation";
+import { useMediaQuery } from "@mui/material";
 
 import {
   Card,
@@ -18,6 +19,7 @@ import {
 
 const CardStation = ({ station }) => {
   const contextStation = useContext(StationContext);
+  const isMobile = useMediaQuery("(max-width:800px)");
 
   const location = useNavigate();
 
@@ -65,7 +67,7 @@ const CardStation = ({ station }) => {
   return (
     <Card
       sx={{
-        width: "150px",
+        width: isMobile ? "120px" : "150px",
         position: "relative",
         height: "210px",
 
@@ -113,6 +115,7 @@ const CardStation = ({ station }) => {
             component="h5"
             variant="p"
             marginBottom="10px"
+            translate="no"
           >
             {`${station.name?.slice(0, 17)} ...`}
           </Typography>
@@ -121,6 +124,7 @@ const CardStation = ({ station }) => {
             color="text.secondary"
             sx={{ height: "20px" }}
             gutterBottom
+            translate="no"
           >
             {station.countrycode}
           </Typography>
@@ -137,6 +141,7 @@ const CardStation = ({ station }) => {
               variant="body2"
               component="span"
               color="text.secondary"
+              translate="no"
             >
               {calcScore({ stationVotes: station.votes })}
             </Typography>

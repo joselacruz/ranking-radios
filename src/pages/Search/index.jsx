@@ -1,7 +1,7 @@
 import { Layout } from "../../components/Layout";
 import { useEffect, useState } from "react";
 import { CardStation } from "../../components/CardStation";
-import { Container, Button, Typography } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import { SearchBar } from "../../components/SearchBar";
 import { useSearchData } from "../../hooks/useSearchData";
 import { BackdropLoading } from "../../components/BackdropLoading";
@@ -75,7 +75,13 @@ const Search = () => {
       {data.length > 9 && (
         <Button
           variant="contained"
-          sx={{ width: "120px" }}
+          sx={{
+            width: "120px",
+            justifySelf: {
+              xs: "center",
+              sm: "start",
+            },
+          }}
           onClick={loadMoreResults}
           disabled={!hasMoreResults}
         >

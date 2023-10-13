@@ -13,9 +13,10 @@ const Home = () => {
 
   const [stationTopClick, setStationTopClick] = useData({
     endpoint: "json/stations/topclick",
-    limit: "5",
+    limit: "10",
   });
 
+  //Funcion para cargar mas resultados  al llegar al final del slider
   const onLastSlideReached = async (updateMethod) => {
     try {
       if (updateMethod === setStationTopVote) {
@@ -52,7 +53,7 @@ const Home = () => {
       {useRenderStations({
         stations: stationTopVote,
         titulo: "Top 10 Radio Stations By Votes",
-        update: setStationTopVote,
+        // update: setStationTopVote,
       })}
       {useRenderStations({
         stations: stationTopClick,

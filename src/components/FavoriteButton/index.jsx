@@ -40,10 +40,7 @@ const FavoriteButton = ({ size, station }) => {
       onClick={handleFavorite}
       color={color}
     >
-      <FavoriteIcon
-        color="red"
-        sx={{ fontSize: size }}
-      />
+      <FavoriteIcon sx={{ fontSize: size }} />
     </IconButton>
   );
 };

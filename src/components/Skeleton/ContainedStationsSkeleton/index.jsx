@@ -16,6 +16,7 @@ const ContainedStationsSkeleton = ({ ShowTitle = true, numberCard = 5 }) => {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
+        gap: "48px",
       }}
     >
       {ShowTitle && (
@@ -32,10 +33,15 @@ const ContainedStationsSkeleton = ({ ShowTitle = true, numberCard = 5 }) => {
 
       <Box
         display="flex"
-        justifyContent="start"
         alignItems="center"
         flexWrap="wrap"
         gap={2}
+        sx={{
+          justifyContent: {
+            xs: "center",
+            sm: "start",
+          },
+        }}
       >
         {Array.from(new Array(numberCard)).map((item, index) => (
           <CardStationSkeleton key={index} />

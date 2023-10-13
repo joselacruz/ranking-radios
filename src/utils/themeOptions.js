@@ -1,7 +1,7 @@
 
 import { createTheme } from '@mui/material/styles';
 
-const themeOptions = createTheme({
+const themeLight = createTheme({
   palette: {
     mode: 'light',
     primary: {
@@ -32,4 +32,41 @@ const themeOptions = createTheme({
   },
 });
 
-export {themeOptions};
+const themeDark = createTheme({
+  palette: {
+    mode: 'dark',
+    primary: {
+      main: '#D32F2F', // Rojo oscuro
+
+    },
+    secondary: {
+      main: '#221d1d', // Gris oscuro
+    },
+    background: {
+      default: '#313131', // Gris oscuro más sólido para el fondo principal
+      paper: '#414141', // Gris oscuro para contenedores y papel
+    },
+    text: {
+      primary: '#FFFFFF',// Blanco puro para el texto en modo oscuro
+      secondary: '#A0A0A0', 
+    },
+    error: {
+      main: '#FF1744', // Rojo más brillante para indicar errores
+    },
+    warning: {
+      main: '#FFC400', // Amarillo brillante para advertencias
+    },
+    info: {
+      main: '#007BFF', // Azul claro para información
+    },
+    divider: '#757575', // Gris medio para separadores
+    success: {
+      main: '#00E676', // Verde vibrante para indicar éxito
+    },
+  },
+});
+
+
+
+
+export {themeLight,themeDark};

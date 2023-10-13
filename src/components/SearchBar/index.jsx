@@ -42,7 +42,11 @@ const SearchBar = ({ query, setQuery, loadData, setData, resetPagination }) => {
           p: "2px 4px",
           display: "flex",
           alignItems: "center",
-          width: 400,
+          width: {
+            xs: "300px",
+            sm: "400px",
+          },
+
           justifySelf: "center",
         }}
       >

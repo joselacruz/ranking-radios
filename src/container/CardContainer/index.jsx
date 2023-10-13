@@ -9,6 +9,12 @@ const CardContainer = ({ children, flexDirection = "row" }) => {
       alignItems="center"
       flexWrap="wrap"
       gap={2}
+      sx={{
+        justifyContent: {
+          xs: "center",
+          sm: "start",
+        },
+      }}
     >
       {children}
     </Box>
