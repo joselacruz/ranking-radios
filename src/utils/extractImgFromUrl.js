@@ -3,7 +3,7 @@ import notFoundImage from '../../public/notfound.jpg';
 
 export async function extractImgFromUrl({ homepageUrl, id, name}) {
 
-  const timeoutMs = 5000; // 5 segundos  para abortar la peticion
+  const timeoutMs = 3000; // 5 segundos  para abortar la peticion
 
 //Si la ulr  Esta en Blanco no hace la peticion para obtener imagenes
   if(homepageUrl === '') {

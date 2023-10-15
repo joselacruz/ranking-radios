@@ -10,6 +10,8 @@ import { Recent } from "../pages/Recent";
 import { Favorite } from "../pages/Favorite";
 
 const AppRoutes = () => {
+  //cada vez que una ruta este activa el scroll de la pagina siempre en la parte superior
+  window.scrollTo(0, 0);
   let routes = useRoutes([
     { path: "/", element: <Home /> },
     { path: "/search", element: <Search /> },

@@ -3,9 +3,11 @@ import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
 import StopCircleIcon from "@mui/icons-material/StopCircle";
 import { CircularProgress, IconButton } from "@mui/material";
 import { useContext } from "react";
+import { StationContext } from "../../context/StationContext";
 
 const PlayPauseIcon = ({ station }) => {
   const context = useContext(PlayerContext);
+  const contextStation = useContext(StationContext);
 
   function stationExistInContext(stationIdentifier) {
     if (context.streamInfo?.stationuuid == stationIdentifier) {
@@ -35,7 +37,12 @@ const PlayPauseIcon = ({ station }) => {
     }
   };
 
-  const sendToStream = () => {
+  const sendToStream = (e) => {
+    e.stopPropagation();
+    //Si se Dio click en el Boton de Play  se
+    // Envia La Estacion al Historial de Estaciones del Contexto
+    contextStation.addHistoryStatios(station);
+
     if (stationExistInContext(station.stationuuid)) {
       context.setPlay(!context.play);
     }
@@ -52,6 +59,7 @@ const PlayPauseIcon = ({ station }) => {
       color="primary"
       onClick={sendToStream}
       disabled={!context.inReproduction && context.play}
+      className="btn-playPause"
     >
       {renderIcon()}
     </IconButton>

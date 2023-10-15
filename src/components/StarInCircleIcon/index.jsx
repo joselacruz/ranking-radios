@@ -26,7 +26,7 @@ const ColoredStar = styled(StarIcon)(({ theme }) => ({
   width: `80%`,
   height: `80%`,
   zIndex: 2,
-  color: theme.palette.primary.main,
+  color: theme.palette.secondary.main,
 }));
 
 const StarInCircleIcon = ({ size }) => {

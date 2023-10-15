@@ -27,14 +27,17 @@ const Recent = () => {
       // Verifica si hay estaciones en el historial.
       if (context.historyStations?.length > 0) {
         // Mapea las estaciones en el historial y crea tarjetas para cada una.
-        const result = context.historyStations.map((item, index) => {
-          return (
-            <CardStation
-              station={item}
-              key={item.stationuuid + index}
-            />
-          );
-        });
+        const result = context.historyStations
+          .slice()
+          .reverse()
+          .map((item, index) => {
+            return (
+              <CardStation
+                station={item}
+                key={item.stationuuid + index}
+              />
+            );
+          });
 
         // Devuelve el resultado (tarjetas de estación).
         return result;
@@ -62,10 +65,7 @@ const Recent = () => {
         Recent
       </Typography>
 
-      <CardContainer
-        children={showHistoryResult()}
-        flexDirection={"row-reverse"}
-      />
+      <CardContainer children={showHistoryResult()} />
     </Layout>
   );
 };

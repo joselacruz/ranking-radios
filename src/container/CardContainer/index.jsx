@@ -1,10 +1,9 @@
 import { Box } from "@mui/material";
 
-const CardContainer = ({ children, flexDirection = "row" }) => {
+const CardContainer = ({ children }) => {
   return (
     <Box
       display="flex"
-      flexDirection={flexDirection}
       justifyContent="start"
       alignItems="center"
       flexWrap="wrap"

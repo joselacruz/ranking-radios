@@ -17,6 +17,12 @@ const genderList = [
   { name: "Rock Indie", color: "#2E8B57" },
   { name: "Cristian", color: "#00FFFF" },
   { name: "Kids", color: "#FF4500" },
+  { name: "K-Pop", color: "#696969" },
+  { name: "Remix", color: "#A52A2A" },
+  { name: "House", color: "#D2691E" },
+  { name: "Christmas", color: "#FF0000" },
+  { name: "J-Pop", color: "#006400" },
+  { name: "Classic", color: "#000000" },
 ];
 const GenderCard = ({ name, color, handleClick }) => {
   return (

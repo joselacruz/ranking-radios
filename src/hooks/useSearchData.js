@@ -87,6 +87,11 @@ const useSearchData = () => {
     setHasMoreResults(true);
   }
 
+  //Reniciar la Data a un array vacion
+
+  const resetData = () => {
+    setData([]);
+  }
  // Devuelve los elementos necesarios para su uso en el componente
   return {
     data,
@@ -96,7 +101,8 @@ const useSearchData = () => {
     setData,
     loading,
     hasMoreResults,
-    resetPagination
+    resetPagination,
+    resetData
   
   };
 };

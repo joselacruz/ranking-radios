@@ -32,7 +32,7 @@ const FavoriteButton = ({ size, station }) => {
     } else {
       setColor("");
     }
-  }, [context.favorites]);
+  }, [context.favorites, station]);
 
   // Renderizar el botón de favoritos con el ícono y tamaño proporcionados
   return (

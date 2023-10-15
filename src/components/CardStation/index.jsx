@@ -43,6 +43,7 @@ const CardStation = ({ station }) => {
   const handleStationDetails = (event) => {
     // Verifica que el clic no se haya realizado en el elemento 'svg'
     // El cual es el boton de play
+
     if (event.target.nodeName !== "svg") {
       // Verifica si la estación tiene un ícono Imagen (favicon) antes de proceder.
       if (station.favicon) {
@@ -58,14 +59,11 @@ const CardStation = ({ station }) => {
         // Navega a la ruta de detalles de la estación.
         location(`/view/${createRoute}`);
       }
-    } else {
-      //Si se Dio click en el Boton de Play tambien se
-      // Envia La Estacion al Historial de Estaciones del Contexto
-      contextStation.addHistoryStatios(station);
     }
   };
   return (
     <Card
+      elevation={16}
       sx={{
         width: isMobile ? "120px" : "150px",
         position: "relative",
