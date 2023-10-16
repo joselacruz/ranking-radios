@@ -65,7 +65,7 @@ const CardStation = ({ station }) => {
     <Card
       elevation={16}
       sx={{
-        width: isMobile ? "120px" : "150px",
+        width: isMobile ? "130px" : "150px",
         position: "relative",
         height: "210px",
 

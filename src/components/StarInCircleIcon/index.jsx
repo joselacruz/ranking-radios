@@ -1,7 +1,6 @@
 import React from "react";
 import StarIcon from "@mui/icons-material/Star";
 import { styled } from "@mui/system";
-import { useTheme } from "@mui/material/styles";
 
 const StarWithCircle = styled("div")(({ size }) => ({
   display: "inline-block",
@@ -30,8 +29,6 @@ const ColoredStar = styled(StarIcon)(({ theme }) => ({
 }));
 
 const StarInCircleIcon = ({ size }) => {
-  const theme = useTheme();
-
   return (
     <StarWithCircle size={size}>
       <Circle>
