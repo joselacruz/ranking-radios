@@ -20,7 +20,7 @@ const VoteIcon = ({ station }) => {
     try {
       // Realiza una solicitud para incrementar los votos en el servidor de Radio Browser
       const response = await fetch(
-        `http://nl1.api.radio-browser.info/json/vote/${station.stationuuid}`
+        `https://nl1.api.radio-browser.info/json/vote/${station.stationuuid}`
       );
 
       // Parsea la respuesta como JSON
