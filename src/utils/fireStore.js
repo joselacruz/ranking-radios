@@ -116,3 +116,51 @@ export const removeItemFireStore = async ({ nameObj, userId, data }) => {
     console.error("Error al eliminar elemento en Firestore:", error);
   }
 };
+
+/**
+ * Actualiza el valor de votos para un elemento específico en un array dentro de un documento de Firestore.
+ * @param {Object} param0 - Parámetros de la función.
+ * @param {string} param0.documentId - Identificador único del documento en Firestore.
+ * @param {string} param0.tuArrayFieldName - Nombre del campo de array que contiene los elementos a actualizar.
+ * @param {string} param0.idElement - Identificador único del elemento que se actualizará.
+ * @param {number} param0.nuevoValor - Nuevo valor para la propiedad 'votes'.
+ */
+export const updateVotesFireStore = async ({
+  documentId,
+  tuArrayFieldName,
+  idElement,
+  nuevoValor,
+}) => {
+  // Referencia al documento en Firestore
+  const docRef = doc(db, "users", documentId);
+
+  try {
+    // Obtiene el documento actual
+    const doc = await getDoc(docRef);
+
+    // Verifica si el documento existe
+    if (doc.exists) {
+      // El documento existe, ahora actualizamos el array
+      const newArray = doc.data()[tuArrayFieldName].map((item) => {
+        // Actualizar solo la propiedad 'votes' del elemento específico
+        if (item.stationuuid === idElement) {
+          return { ...item, votes: nuevoValor };
+        }
+        return item;
+      });
+
+      // Actualiza el documento en Firestore con el nuevo array
+      await updateDoc(docRef, {
+        [tuArrayFieldName]: newArray,
+      });
+    } else {
+      // Maneja el caso en el que el documento no existe
+      console.log("El documento no existe.");
+    }
+  } catch (error) {
+    // Maneja errores durante la obtención/actualización del documento
+    console.error("Error obteniendo/actualizando el documento:", error);
+  }
+};
+
+// FIN updateVotesFireStore **

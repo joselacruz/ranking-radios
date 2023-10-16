@@ -6,6 +6,7 @@ import { PlayPauseIcon } from "../../components/PlayPauseIcon";
 import { FavoriteButton } from "../../components/FavoriteButton";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import { RadioStationInfoCard } from "../../components/RadioStationInfoCard";
+import { VoteIcon } from "../../components/VoteIcon";
 
 const ViewStation = () => {
   const context = useContext(StationContext);
@@ -77,9 +78,7 @@ const ViewStation = () => {
             size="28px"
             station={context.stationDetails}
           />
-          <IconButton>
-            <ThumbUpIcon sx={{ fontSize: "28px" }} />
-          </IconButton>
+          <VoteIcon station={context.stationDetails} />
         </Stack>
 
         <RadioStationInfoCard stationInfo={stationInfo} />

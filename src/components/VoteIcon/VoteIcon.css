@@ -1,0 +1,18 @@
+.animated {
+    animation: bounce 1s; /* Ajusta la duración según tu preferencia */
+  }
+  
+  @keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+      transform: translateY(0);
+    }
+  
+    40% {
+      transform: translateY(-20px); /* Ajusta la distancia de rebote */
+    }
+  
+    60% {
+      transform: translateY(-10px); /* Ajusta la distancia de rebote */
+    }
+  }
+  

@@ -3,6 +3,7 @@ import { UserContext } from "./UserContext";
 import { getData } from "../utils/fireStore";
 import { saveFireStore } from "../utils/fireStore";
 import { removeItemFireStore } from "../utils/fireStore";
+import { updateVotesFireStore } from "../utils/fireStore";
 
 export const StationContext = createContext();
 
@@ -15,18 +16,19 @@ export const StationProvider = ({ children }) => {
   //Historial de Estaciones Reproducidas y visitadas
   const [historyStations, setHistoryStations] = useState(null);
 
+  const isExistInHistory = (idStation) => {
+    return historyStations.some((station) => station.stationuuid == idStation);
+  };
+
   //Actualizar el Historial de Estaciones
   const addHistoryStatios = (newStation) => {
     /**
      * Verifica si el Estado con el historial de estacion ya Tiene
      * la nueva Estacion que queremos agregar
      */
-    const isExistInHistory = historyStations.some(
-      (station) => station.stationuuid == newStation.stationuuid
-    );
 
     //Solo si no la tiene actualizamos el estado
-    if (!isExistInHistory) {
+    if (!isExistInHistory(newStation.stationuuid)) {
       setHistoryStations([...historyStations, newStation]);
 
       // Guarda La Estacion en el Historial de Estaciones en FireStore
@@ -98,6 +100,78 @@ export const StationProvider = ({ children }) => {
     fetchHistoryAndFavorites();
   }, []);
 
+  /**
+   * Actualiza el número de votos y propaga los cambios a diferentes contextos y Firestore.
+   * @param {Object} param0 - Parámetros de la función.
+   * @param {number} param0.newVote - Nuevo número de votos.
+   * @param {string} param0.stationId - Identificador único de la estación.
+   */
+  const updateVotes = ({ newVote, stationId }) => {
+    // Actualiza el número de votos en la sección de mostrar detalles de la estación
+    setStationDetails((prevState) => ({
+      ...prevState, // Copia todas las propiedades del estado anterior
+      votes: newVote, // Actualiza la propiedad 'votes'
+    }));
+
+    // Si la estación existe en el estado de favoritos, actualiza el número de votos
+    if (isExistInfavorite(stationId)) {
+      updateVoteState({
+        set: setFavorites,
+        newValue: newVote,
+        stationId: stationId,
+      });
+
+      // Si la estación existe en favoritos, se supone que ya existe en Firestore,
+      // así que actualizamos los votos allí
+
+      updateVotesFireStore({
+        idElement: stationId,
+        documentId: userContext.user,
+        tuArrayFieldName: "favorites",
+        nuevoValor: newVote,
+      });
+    }
+
+    // Si la estación existe en el historial, actualiza el número de votos
+    if (isExistInHistory(stationId)) {
+      updateVoteState({
+        set: setHistoryStations,
+        newValue: newVote,
+        stationId: stationId,
+      });
+
+      // Si la estación existe en el historial de estaciones visitadas, se supone
+      // que ya existe en Firestore, así que actualizamos los votos allí
+
+      updateVotesFireStore({
+        idElement: stationId,
+        documentId: userContext.user,
+        tuArrayFieldName: "historyStations",
+        nuevoValor: newVote,
+      });
+    }
+  };
+
+  /**
+   * Actualiza la propiedad 'votes' en un Estado específico.
+   * @param {Object} param0 - Parámetros de la función.
+   * @param {function} param0.set - Función para actualizar el estado.
+   * @param {number} param0.newValue - Nuevo valor para 'votes'.
+   * @param {string} param0.stationId - Identificador único de la estación.
+   */
+  function updateVoteState({ set, newValue, stationId }) {
+    set((prevState) =>
+      prevState.map((item) => {
+        if (item.stationuuid === stationId) {
+          // Devuelve un nuevo objeto con la propiedad 'votes' actualizada
+          return { ...item, votes: newValue };
+        }
+        return item;
+      })
+    );
+  }
+
+  //Fin updateVoteState
   return (
     <StationContext.Provider
       value={{
@@ -107,8 +181,10 @@ export const StationProvider = ({ children }) => {
         addHistoryStatios,
         addFavorite,
         removeFavorite,
+        isExistInHistory,
         isExistInfavorite,
         favorites,
+        updateVotes,
       }}
     >
       {children}
