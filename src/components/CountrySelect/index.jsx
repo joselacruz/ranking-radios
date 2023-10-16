@@ -19,7 +19,7 @@ export function CountrySelect({ selectedCountry, setSelectedCountry }) {
   async function obtainListCountry() {
     try {
       const response = await fetch(
-        "http://de1.api.radio-browser.info/json/countries"
+        "https://de1.api.radio-browser.info/json/countries"
       );
       const data = await response.json();
 

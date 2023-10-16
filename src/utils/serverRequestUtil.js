@@ -28,7 +28,7 @@ import axios from "axios";
 
 
 const serverList = [{
-  url:'http://nl1.api.radio-browser.info/'},
+  url:'https://nl1.api.radio-browser.info/'},
 {url:'https://de1.api.radio-browser.info/'},
 {url:'https://fr1.api.radio-browser.info/'},
 {url:'https://at1.api.radio-browser.info/'}
@@ -89,7 +89,7 @@ return null;
 
 
 // const serverList = [{
-//   url:'http://nl1.api.radio-browser.info/'},
+//   url:'https://nl1.api.radio-browser.info/'},
 // {url:'https://de1.api.radio-browser.info/'},
 // {url:'https://fr1.api.radio-browser.info/'},
 // {url:'https://at1.api.radio-browser.info/'}
