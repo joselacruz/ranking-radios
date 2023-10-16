@@ -114,6 +114,7 @@ const CardStation = ({ station }) => {
             variant="p"
             marginBottom="10px"
             translate="no"
+            sx={{ height: "24px" }}
           >
             {`${station.name?.slice(0, 17)} ...`}
           </Typography>
