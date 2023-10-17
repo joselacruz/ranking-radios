@@ -56,8 +56,8 @@ const GenderCard = ({ name, color, handleClick }) => {
 
 const GenderSelector = ({ loadData, setSelectGender }) => {
   const loadDataByGender = (genderName) => {
-    loadData({ queryParam: "tag", value: genderName });
     setSelectGender(genderName);
+    loadData({ queryParam: "tag", value: genderName });
   };
   return (
     <>

@@ -47,6 +47,7 @@ const useSearchData = () => {
       } else if (response.length < 10) {
         // Si la respuesta es menor que 10 y no estamos en la primera iteración, marcamos hasMoreResults como falso
         setHasMoreResults(false);
+        
       }
       // Actualiza el estado de los datos
       setData((prevData) => (preserveData ? [...prevData, ...response] : response));
@@ -91,6 +92,7 @@ const useSearchData = () => {
 
   const resetData = () => {
     setData([]);
+    resetPagination()
   }
  // Devuelve los elementos necesarios para su uso en el componente
   return {

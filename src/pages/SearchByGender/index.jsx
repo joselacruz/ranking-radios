@@ -9,7 +9,8 @@ import { CardContainer } from "../../container/CardContainer";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 const SearchByGender = () => {
-  const { data, loadData, moreResults, loading, resetData } = useSearchData();
+  const { data, loadData, moreResults, loading, resetData, hasMoreResults } =
+    useSearchData();
 
   //Genero Selecionado
   const [selectGender, setSelectGender] = useState(null);
@@ -69,7 +70,7 @@ const SearchByGender = () => {
         data tenga mas de 9 elementos */}
       {data.length > 9 && (
         <Button
-          disabled={loading}
+          disabled={!hasMoreResults}
           onClick={loadMoreResults}
           variant="contained"
           sx={{
