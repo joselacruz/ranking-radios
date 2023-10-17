@@ -6,6 +6,7 @@ import { StarInCircleIcon } from "../StarInCircleIcon";
 import { calcScore } from "../../utils/scoreStation";
 import { useMediaQuery } from "@mui/material";
 import { sliceTitle } from "../../utils/sliceTitle";
+import { useStationNavigation } from "../../utils/stationNav";
 
 import {
   Card,
@@ -18,6 +19,8 @@ import {
 } from "@mui/material";
 
 const CardStation = ({ station }) => {
+  const stationNav = useStationNavigation();
+
   const contextStation = useContext(StationContext);
   const isMobile = useMediaQuery("(max-width:800px)");
 
@@ -47,17 +50,8 @@ const CardStation = ({ station }) => {
     if (event.target.nodeName !== "svg") {
       // Verifica si la estación tiene un ícono Imagen (favicon) antes de proceder.
       if (station.favicon) {
-        // Establece los detalles de la estación en el contexto.
-        contextStation.setStationDetails(station);
-
-        // Envia La Estacion al Historial de Estaciones del Contexto
-        contextStation.addHistoryStatios(station);
-
-        // Crea una ruta amigable para la estación eliminando espacios y usando guiones
-        const createRoute = station.name.split(" ").join("-");
-
-        // Navega a la ruta de detalles de la estación.
-        location(`/view/${createRoute}`);
+        // cambia la ruta y me muestra los detalles de la estacion
+        stationNav({ station: station });
       }
     }
   };

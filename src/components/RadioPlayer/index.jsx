@@ -20,13 +20,16 @@ import { FavoriteButton } from "../FavoriteButton";
 import { useSnackbar } from "notistack";
 import { useMediaQuery } from "@mui/material";
 import { sliceTitle } from "../../utils/sliceTitle";
+import { useStationNavigation } from "../../utils/stationNav";
 
 const RadioPlayer = () => {
+  const stationNav = useStationNavigation();
   const isMobile = useMediaQuery("(max-width:768px)");
-  const context = useContext(PlayerContext);
+
+  const playerContext = useContext(PlayerContext);
   // Desestructuración de propiedades de context
   const { play, inReproduction, streamInfo, setPlay, setInReproduction } =
-    context;
+    playerContext;
   const audioElementRef = useRef(null);
   const [showsliderSound, setShowsliderSound] = useState(false);
   const [volumen, setVolumen] = useState(100);
@@ -147,7 +150,7 @@ const RadioPlayer = () => {
       audioElement.removeEventListener("play", handlePlay);
       audioElement.removeEventListener("pause", handlePause);
     };
-  }, [context]);
+  }, [playerContext]);
 
   const stylesContained = {
     display: "flex",
@@ -156,6 +159,16 @@ const RadioPlayer = () => {
     gap: "10px",
   };
 
+  //funcion para el evento del click de la imagen y titulo del nombre y pais
+  //para que cuando ocurra el click me lleve a la ruta para ver los detalles de la estacion
+  const showStationDetailsOnClick = (event) => {
+    const element = event.target;
+    if (element.nodeName === "IMG" || element.nodeName === "P") {
+      stationNav({ station: streamInfo });
+    } else {
+      event.stopPropagation();
+    }
+  };
   return (
     <>
       <audio ref={audioElementRef} />
@@ -188,6 +201,7 @@ const RadioPlayer = () => {
             paddingInlineStart: "16px",
             paddingInlineEnd: "16px",
           }}
+          onClick={showStationDetailsOnClick}
         >
           {/* Contenedor info Station */}
           <Box sx={stylesContained}>
@@ -200,23 +214,29 @@ const RadioPlayer = () => {
             >
               <img
                 src={streamInfo?.favicon}
-                alt=""
+                alt={streamInfo?.name}
                 style={{
                   width: "100%",
                   objectFit: "contain",
                   height: "100%",
                   borderRadius: "4px",
+                  cursor: "pointer",
                 }}
               />
             </Paper>
             <Box>
               <Typography
                 variant="body1"
-                sx={{ fontWeight: "bold" }}
+                translate="no"
+                sx={{ fontWeight: "bold", cursor: "pointer" }}
               >
                 {sliceTitle(streamInfo?.name)}
               </Typography>
-              <Typography variant="body2">
+              <Typography
+                variant="body2"
+                translate="no"
+                sx={{ cursor: "pointer" }}
+              >
                 {sliceTitle(streamInfo?.country)}
               </Typography>
             </Box>
@@ -239,7 +259,10 @@ const RadioPlayer = () => {
           {isMobile ? null : (
             <Box sx={stylesContained}>
               <Box sx={{ position: "relative" }}>
-                <IconButton onClick={toogleSound}>
+                <IconButton
+                  onClick={toogleSound}
+                  className="btnSound"
+                >
                   <VolumeUpIcon sx={{ fontSize: "28px" }} />
                 </IconButton>
                 {showsliderSound && (
