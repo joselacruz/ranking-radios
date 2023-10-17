@@ -1,11 +1,11 @@
 import { useContext, useState } from "react";
 import { StationContext } from "../../context/StationContext";
-
 import { PlayPauseIcon } from "../PlayPauseIcon";
 import { useNavigate } from "react-router-dom";
 import { StarInCircleIcon } from "../StarInCircleIcon";
 import { calcScore } from "../../utils/scoreStation";
 import { useMediaQuery } from "@mui/material";
+import { sliceTitle } from "../../utils/sliceTitle";
 
 import {
   Card,
@@ -116,7 +116,7 @@ const CardStation = ({ station }) => {
             translate="no"
             sx={{ height: "24px" }}
           >
-            {`${station.name?.slice(0, 17)} ...`}
+            {sliceTitle(station.name)}
           </Typography>
           <Typography
             variant="body2"

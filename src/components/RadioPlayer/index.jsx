@@ -19,10 +19,14 @@ import VolumeUpIcon from "@mui/icons-material/VolumeUp";
 import { FavoriteButton } from "../FavoriteButton";
 import { useSnackbar } from "notistack";
 import { useMediaQuery } from "@mui/material";
+import { sliceTitle } from "../../utils/sliceTitle";
 
 const RadioPlayer = () => {
   const isMobile = useMediaQuery("(max-width:768px)");
   const context = useContext(PlayerContext);
+  // Desestructuración de propiedades de context
+  const { play, inReproduction, streamInfo, setPlay, setInReproduction } =
+    context;
   const audioElementRef = useRef(null);
   const [showsliderSound, setShowsliderSound] = useState(false);
   const [volumen, setVolumen] = useState(100);
@@ -31,63 +35,51 @@ const RadioPlayer = () => {
   const theme = useTheme();
   const { enqueueSnackbar } = useSnackbar();
 
-  function renderIcon() {
+  const renderIcon = () => {
     const iconProps = {
       color: "primary",
       sx: { fontSize: "48px" },
     };
 
-    if (context.play) {
-      if (context.inReproduction) {
-        return <StopCircleIcon {...iconProps} />;
-      } else {
-        return <CircularProgress />;
-      }
+    if (play) {
+      return inReproduction ? (
+        <StopCircleIcon {...iconProps} />
+      ) : (
+        <CircularProgress />
+      );
     } else {
       return <PlayCircleIcon {...iconProps} />;
     }
-  }
+  };
 
-  function showSound() {
+  function toogleSound() {
     setShowsliderSound(!showsliderSound);
   }
 
   const togglePlay = () => {
-    if (context.streamInfo) {
-      context.setPlay(!context.play);
+    if (streamInfo) {
+      setPlay(!play);
     }
   };
 
-  const sliceTitle = (name) => {
-    if (name && name.length > 14) {
-      return `${name.slice(0, 16)}...`;
-    } else if (name && name.length < 14) return name.slice(0, 15);
-  };
   // Reproducir
   useEffect(() => {
     const audioElement = audioElementRef.current;
 
     if (!audioElement) return;
-    if (context.streamInfo?.url) {
-      if (context.play) {
-        audioElement.src = context.streamInfo.url_resolved; // Cambia la fuente de audio para reiniciar completamente
+    if (streamInfo?.url) {
+      if (play) {
+        audioElement.src = streamInfo.url_resolved; // Cambia la fuente de audio para reiniciar completamente
         audioElement.load(); // Carga la nueva fuente de audio
         audioElement.play();
-        context.setInReproduction(false);
+        setInReproduction(false);
         setVariant("permanent");
       } else {
         audioElement.pause();
-        context.setInReproduction(false);
+        setInReproduction(false);
       }
     }
-  }, [context.play, context.streamInfo]);
-
-  const stylesContained = {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: "10px",
-  };
+  }, [play, streamInfo]);
 
   //Saber si el audio Cargo o Fallo la reproduccion
   useEffect(() => {
@@ -96,11 +88,11 @@ const RadioPlayer = () => {
     if (!audioElement) return;
 
     const handleLoadReproduction = (event) => {
-      context.setInReproduction(true);
+      setInReproduction(true);
     };
     const handleLoadError = () => {
-      context.setInReproduction(false);
-      context.setPlay(false);
+      setInReproduction(false);
+      setPlay(false);
       enqueueSnackbar(
         "Sorry, we are unable to play the radio station at this time.",
         {
@@ -120,7 +112,7 @@ const RadioPlayer = () => {
       audioElement.removeEventListener("loadeddata", handleLoadReproduction);
       audioElement.removeEventListener("error", handleLoadError);
     };
-  }, [context.play, context.streamInfo]);
+  }, [play, streamInfo]);
 
   //  subir o bajar Volumen
   useEffect(() => {
@@ -131,6 +123,39 @@ const RadioPlayer = () => {
     }
   }, [volumen]);
 
+  //Efecto para manejar la reproducción y pausa del audio en respuesta a los controles nativos.
+  useEffect(() => {
+    const audioElement = audioElementRef.current;
+
+    // Manejar la reproducción cuando se utiliza el control nativo de "play"
+    const handlePlay = () => {
+      setPlay(true);
+    };
+
+    // Manejar la pausa cuando se utiliza el control nativo de "pause"
+    const handlePause = () => {
+      setPlay(false);
+      setInReproduction(false);
+    };
+
+    // Agregar oyentes de eventos al elemento de audio
+    audioElement.addEventListener("play", handlePlay);
+    audioElement.addEventListener("pause", handlePause);
+
+    // Retirar los oyentes de eventos cuando el componente se desmonta
+    return () => {
+      audioElement.removeEventListener("play", handlePlay);
+      audioElement.removeEventListener("pause", handlePause);
+    };
+  }, [context]);
+
+  const stylesContained = {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: "10px",
+  };
+
   return (
     <>
       <audio ref={audioElementRef} />
@@ -138,7 +163,7 @@ const RadioPlayer = () => {
       <Drawer
         anchor="bottom"
         variant={variant}
-        open={context.play}
+        open={play}
         hideBackdrop={false}
         PaperProps={{
           sx: {
@@ -174,7 +199,7 @@ const RadioPlayer = () => {
               }}
             >
               <img
-                src={context.streamInfo?.favicon}
+                src={streamInfo?.favicon}
                 alt=""
                 style={{
                   width: "100%",
@@ -189,24 +214,24 @@ const RadioPlayer = () => {
                 variant="body1"
                 sx={{ fontWeight: "bold" }}
               >
-                {sliceTitle(context.streamInfo?.name)}
+                {sliceTitle(streamInfo?.name)}
               </Typography>
               <Typography variant="body2">
-                {sliceTitle(context.streamInfo?.country)}
+                {sliceTitle(streamInfo?.country)}
               </Typography>
             </Box>
           </Box>
 
           {/* contenedor Live */}
           <Box sx={stylesContained}>
-            {isMobile ? null : <StreamLine isActive={context.inReproduction} />}
+            {isMobile ? null : <StreamLine isActive={inReproduction} />}
             <IconButton
               onClick={togglePlay}
-              disabled={!context.inReproduction && context.play}
+              disabled={!inReproduction && play}
             >
               {renderIcon()}
             </IconButton>
-            {isMobile ? null : <StreamLine isActive={context.inReproduction} />}
+            {isMobile ? null : <StreamLine isActive={inReproduction} />}
           </Box>
 
           {/* contenedor botones volumen */}
@@ -214,7 +239,7 @@ const RadioPlayer = () => {
           {isMobile ? null : (
             <Box sx={stylesContained}>
               <Box sx={{ position: "relative" }}>
-                <IconButton onClick={showSound}>
+                <IconButton onClick={toogleSound}>
                   <VolumeUpIcon sx={{ fontSize: "28px" }} />
                 </IconButton>
                 {showsliderSound && (
@@ -237,7 +262,7 @@ const RadioPlayer = () => {
 
               <FavoriteButton
                 size="28px"
-                station={context.streamInfo}
+                station={streamInfo}
               />
             </Box>
           )}
