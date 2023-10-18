@@ -60,6 +60,7 @@ const PlayPauseIcon = ({ station }) => {
       onClick={sendToStream}
       disabled={!context.inReproduction && context.play}
       className="btn-playPause"
+      sx={{ width: "74px", height: "74px" }}
     >
       {renderIcon()}
     </IconButton>

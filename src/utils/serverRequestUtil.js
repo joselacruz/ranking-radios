@@ -83,7 +83,7 @@ for (const server of serverList) {
 }
 
 // Si ninguna solicitud fue exitosa, puedes manejarlo aquí
-return null;
+return ;
 }
 
 

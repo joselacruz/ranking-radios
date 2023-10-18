@@ -7,6 +7,7 @@ import { calcScore } from "../../utils/scoreStation";
 import { useMediaQuery } from "@mui/material";
 import { sliceTitle } from "../../utils/sliceTitle";
 import { useStationNavigation } from "../../utils/stationNav";
+import { DialogClickStation } from "../Dialog";
 
 import {
   Card,
@@ -19,6 +20,7 @@ import {
 } from "@mui/material";
 
 const CardStation = ({ station }) => {
+  const [openDialog, setOpenDialog] = useState(false);
   const stationNav = useStationNavigation();
 
   const contextStation = useContext(StationContext);
@@ -46,121 +48,145 @@ const CardStation = ({ station }) => {
   const handleStationDetails = (event) => {
     // Verifica que el clic no se haya realizado en el elemento 'svg'
     // El cual es el boton de play
-
+    event.stopPropagation();
     if (event.target.nodeName !== "svg") {
       // Verifica si la estación tiene un ícono Imagen (favicon) antes de proceder.
       if (station.favicon) {
         // cambia la ruta y me muestra los detalles de la estacion
-        stationNav({ station: station });
+
+        //Si estamos un mobile mostramos una nodal para preguntarle a un usuario si quiere
+        //reproducir o visitar la estacion y no hacerlo por defecto
+        if (isMobile) {
+          setOpenDialog(true);
+        } else {
+          stationNav({ station: station });
+          setOpenDialog(false);
+        }
       }
     }
   };
+
   return (
-    <Card
-      elevation={16}
-      sx={{
-        width: isMobile ? "130px" : "150px",
-        position: "relative",
-        height: "210px",
-
-        transition: "opacity 0.3s ease-in-out", // Animación de opacidad
-        "&:hover": {
-          opacity: "0.9", // Opacidad cuando se realiza un hover en la Card
-        },
-      }}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-      onClick={handleStationDetails}
-    >
-      <CardActionArea
+    <>
+      <Card
+        elevation={16}
         sx={{
-          height: "100%",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "flex-start",
-          alignItems: "flex-start",
+          width: isMobile ? "130px" : "150px",
+          position: "relative",
+          height: "210px",
+
+          transition: "opacity 0.3s ease-in-out", // Animación de opacidad
+          "&:hover": {
+            opacity: "0.9", // Opacidad cuando se realiza un hover en la Card
+          },
         }}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        onClick={handleStationDetails}
       >
-        {station.favicon ? (
-          <CardMedia
-            sx={{
-              height: 115,
-              width: "100%",
-              borderRadius: "4px",
-              backgroundColor: "rgb(87 80 80 / 3%)",
-            }}
-            image={station.favicon}
-            title={station.name}
-          />
-        ) : (
-          <Skeleton
-            variant="rectangular"
-            width="100%"
-            height={115}
-            animation="wave"
-          ></Skeleton>
-        )}
+        <CardActionArea
+          sx={{
+            height: "100%",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "flex-start",
+            alignItems: "flex-start",
+          }}
+        >
+          {station.favicon ? (
+            <CardMedia
+              sx={{
+                height: 115,
+                width: "100%",
+                borderRadius: "4px",
+                backgroundColor: "rgb(87 80 80 / 3%)",
+              }}
+              image={station.favicon}
+              title={station.name}
+            />
+          ) : (
+            <Skeleton
+              variant="rectangular"
+              width="100%"
+              height={115}
+              animation="wave"
+            ></Skeleton>
+          )}
 
-        <CardContent sx={{ p: 1, marginTop: 1 }}>
-          <Typography
-            textTransform="uppercase"
-            component="h5"
-            variant="p"
-            marginBottom="10px"
-            translate="no"
-            sx={{ height: "24px" }}
-          >
-            {sliceTitle(station.name)}
-          </Typography>
-          <Typography
-            variant="body2"
-            color="text.secondary"
-            sx={{ height: "20px" }}
-            gutterBottom
-            translate="no"
-          >
-            {station.countrycode}
-          </Typography>
-
-          <Box
-            sx={{
-              display: "flex",
-              gap: "3px",
-              alignItems: "end",
-            }}
-          >
-            <StarInCircleIcon size="24px" />
+          <CardContent sx={{ p: 1, marginTop: 1 }}>
+            <Typography
+              textTransform="uppercase"
+              component="h5"
+              variant="p"
+              marginBottom="10px"
+              translate="no"
+              sx={{ height: "24px" }}
+            >
+              {sliceTitle(station.name)}
+            </Typography>
             <Typography
               variant="body2"
-              component="span"
               color="text.secondary"
+              sx={{ height: "20px" }}
+              gutterBottom
               translate="no"
             >
-              {calcScore({ stationVotes: station.votes })}
+              {station.countrycode}
             </Typography>
-          </Box>
-        </CardContent>
-      </CardActionArea>
 
-      {isHovered &&
-        station.favicon && ( // Mostrar el icono de reproducción en hover
-          <Box
-            color="primary"
-            className={`hover-button ${isHovered ? "hovered" : ""}`}
-            sx={{
-              position: "absolute",
-              top: "50%",
-              right: "0%",
-              transform: `translate(-50%, -50%) scale(${isHovered ? 1 : 0.8})`, // Escala inicial y al hacer hover
-              opacity: isHovered ? 1 : 0.9, // Opacidad controlada por el hover
-              transition:
-                "transform 0.3s ease-in-out, opacity 0.3s ease-in-out", // Animación suave
-            }}
-          >
-            <PlayPauseIcon station={station} />
-          </Box>
-        )}
-    </Card>
+            <Box
+              sx={{
+                display: "flex",
+                gap: "3px",
+                alignItems: "end",
+              }}
+            >
+              <StarInCircleIcon size="24px" />
+              <Typography
+                variant="body2"
+                component="span"
+                color="text.secondary"
+                translate="no"
+              >
+                {calcScore({ stationVotes: station.votes })}
+              </Typography>
+            </Box>
+          </CardContent>
+        </CardActionArea>
+
+        {isHovered &&
+          station.favicon && ( // Mostrar el icono de reproducción en hover
+            <Box
+              color="primary"
+              className={`hover-button ${isHovered ? "hovered" : ""}`}
+              sx={{
+                position: "absolute",
+                top: "50%",
+                right: "0%",
+                transform: `translate(-50%, -50%) scale(${
+                  isHovered ? 1 : 0.8
+                })`, // Escala inicial y al hacer hover
+                opacity: isHovered ? 1 : 0.9, // Opacidad controlada por el hover
+                transition:
+                  "transform 0.3s ease-in-out, opacity 0.3s ease-in-out", // Animación suave
+              }}
+            >
+              <PlayPauseIcon station={station} />
+            </Box>
+          )}
+      </Card>
+
+      <DialogClickStation
+        open={openDialog}
+        onClose={() => {
+          setOpenDialog(false);
+        }}
+        station={station}
+        stationNav={() => {
+          stationNav({ station: station });
+        }}
+      ></DialogClickStation>
+    </>
   );
 };
 

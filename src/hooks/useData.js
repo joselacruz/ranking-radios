@@ -16,6 +16,7 @@ export const useData = ({endpoint,limit}) => {
         });
         setData(result);
       } catch (error) {
+      
         console.error(error);
       }
     }
@@ -23,7 +24,10 @@ export const useData = ({endpoint,limit}) => {
   }, [endpoint,limit]);
 
   useEffect(() => {
+  
+   if(data && data.length > 0) {
     updateFavicons({dataToUpdate:data, setdataToUpdate:setData})
+   }
   }, [data]);
 
 

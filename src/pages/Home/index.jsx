@@ -35,7 +35,7 @@ const Home = () => {
   };
 
   function useRenderStations({ stations, titulo, update }) {
-    if (stations.length > 0) {
+    if (stations && stations.length > 0) {
       return (
         <CardContainerWithSlider
           titulo={titulo}
@@ -43,8 +43,10 @@ const Home = () => {
           onLastSlideReached={() => onLastSlideReached(update)}
         />
       );
-    } else {
+    } else if (stations && stations.length === 0) {
       return <ContainedStationsSkeleton />;
+    } else {
+      return;
     }
   }
 
@@ -59,6 +61,10 @@ const Home = () => {
         stations: stationTopClick,
         titulo: "Top 10 Most Visited Stations",
       })}
+
+      {!stationTopVote && !stationTopClick && (
+        <p>Sorry, we have problems right now, try again later.</p>
+      )}
     </Layout>
   );
 };

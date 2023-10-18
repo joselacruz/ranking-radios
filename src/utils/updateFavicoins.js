@@ -11,7 +11,7 @@ export async function updateFavicons({dataToUpdate, setdataToUpdate}) {
           });
   
           return setdataToUpdate((prevStations) =>
-            prevStations.map((station) =>
+            prevStations?.map((station) =>
               station.stationuuid === item.stationuuid
                 ? { ...station, favicon: newFavicon }
                 : station
