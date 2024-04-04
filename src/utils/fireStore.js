@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
+import { initializeApp } from 'firebase/app';
+import { getAnalytics } from 'firebase/analytics';
 import {
   doc,
   updateDoc,
@@ -8,8 +8,8 @@ import {
   arrayUnion,
   getDoc,
   arrayRemove,
-} from "firebase/firestore";
-import { getFirestore } from "firebase/firestore";
+} from 'firebase/firestore';
+import { getFirestore } from 'firebase/firestore';
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -17,13 +17,13 @@ import { getFirestore } from "firebase/firestore";
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyDRRVXzPlmQBBmyKt-_mSphkNcbwUNaYS8",
-  authDomain: "radio-ranking.firebaseapp.com",
-  projectId: "radio-ranking",
-  storageBucket: "radio-ranking.appspot.com",
-  messagingSenderId: "849651209512",
-  appId: "1:849651209512:web:811a294e96f42d4c982c1d",
-  measurementId: "G-63PL9XG7XR",
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
 };
 
 // Initialize Firebase
@@ -40,21 +40,21 @@ const analytics = getAnalytics(app);
 export const saveFireStore = async ({ nameObj, userId, data }) => {
   try {
     // Verifica si el documento existe llamando a la función 'docExist'
-    const check = await docExist({ name: "users", docId: userId });
+    const check = await docExist({ name: 'users', docId: userId });
 
     if (check) {
       // Si el documento existe, realiza la operación para agregar el elemento al final del array
-      const docRef = doc(db, "users", userId);
+      const docRef = doc(db, 'users', userId);
       await updateDoc(docRef, {
         [nameObj]: arrayUnion(data),
       });
     } else {
       // Si el documento no existe, crea un nuevo documento con el array inicializado con 'data'
-      await setDoc(doc(db, "users", userId), { [nameObj]: [data] });
+      await setDoc(doc(db, 'users', userId), { [nameObj]: [data] });
     }
   } catch (error) {
     // Maneja errores si ocurren durante el proceso de guardado
-    console.error("Error al guardar datos en Firestore:", error);
+    console.error('Error al guardar datos en Firestore:', error);
   }
 };
 // FIN saveRecentFireStore **
@@ -76,7 +76,7 @@ async function docExist({ name, docId }) {
     return docSnapshot.exists();
   } catch (error) {
     // Maneja errores durante la obtención del documento
-    console.error("Error al obtener el documento:", error);
+    console.error('Error al obtener el documento:', error);
     // Retorna 'false' en caso de error para indicar que no existe
     return false;
   }
@@ -85,7 +85,7 @@ async function docExist({ name, docId }) {
 
 export const getData = async (userId) => {
   try {
-    const docRef = doc(db, "users", userId);
+    const docRef = doc(db, 'users', userId);
     const docSnapshot = await getDoc(docRef);
 
     if (docSnapshot.exists()) {
@@ -94,26 +94,26 @@ export const getData = async (userId) => {
       return userData || [];
     } else {
       // Si el documento no existe, retorna un array vacío
-      console.log("El documento no existe.");
+      console.log('El documento no existe.');
       return [];
     }
   } catch (error) {
     // Maneja errores si ocurren durante el proceso de obtención de datos
-    console.error("Error al obtener datos de Firestore:", error);
+    console.error('Error al obtener datos de Firestore:', error);
     return [];
   }
 };
 
 export const removeItemFireStore = async ({ nameObj, userId, data }) => {
   try {
-    const docRef = doc(db, "users", userId);
+    const docRef = doc(db, 'users', userId);
 
     // Actualiza el documento, eliminando el elemento del array
     await updateDoc(docRef, {
       [nameObj]: arrayRemove(data),
     });
   } catch (error) {
-    console.error("Error al eliminar elemento en Firestore:", error);
+    console.error('Error al eliminar elemento en Firestore:', error);
   }
 };
 
@@ -132,7 +132,7 @@ export const updateVotesFireStore = async ({
   nuevoValor,
 }) => {
   // Referencia al documento en Firestore
-  const docRef = doc(db, "users", documentId);
+  const docRef = doc(db, 'users', documentId);
 
   try {
     // Obtiene el documento actual
@@ -155,11 +155,11 @@ export const updateVotesFireStore = async ({
       });
     } else {
       // Maneja el caso en el que el documento no existe
-      console.log("El documento no existe.");
+      console.log('El documento no existe.');
     }
   } catch (error) {
     // Maneja errores durante la obtención/actualización del documento
-    console.error("Error obteniendo/actualizando el documento:", error);
+    console.error('Error obteniendo/actualizando el documento:', error);
   }
 };
 
